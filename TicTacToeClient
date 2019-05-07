@@ -70,7 +70,7 @@ public class TicTacToeClient extends JFrame implements Runnable
       panel2.add( boardPanel, BorderLayout.CENTER ); // add board panel
       add( panel2, BorderLayout.CENTER ); // add container panel
 
-      setSize( 300, 225 ); // set size of window
+      setSize( 300, 300 ); // set size of window
       setVisible( true ); // show window
 
       startClient();
