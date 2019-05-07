@@ -140,6 +140,8 @@ public class TicTacToeServer extends JFrame
       if ( !isOccupied( location ) )
       {
          board[ location ] = MARKS[ currentPlayer ]; // set move on board
+	 //****Edited Line: Win/Draw Condition Check goes after THIS Line****
+         winSwitch(location); //Check if current player has won
          currentPlayer = ( currentPlayer + 1 ) % 2; // change player
 
          // let new current player know that move occurred
@@ -324,282 +326,317 @@ public class TicTacToeServer extends JFrame
       } // end method setSuspended
    } // end class Player
    //Test win conditions method--Added code
-   public void winChk() { //Called after every move to check if game is won
-	   //Iterate through board
-	   for(int i = 0; i < board.length; i++) {
-		   winSwitch(i);
-	   }
-   }
-   public void winSwitch(int index) { //To be used in a for loop checking the winning condition
-	   switch(index) {
-	   case 0:
-	   {
-		   //Adjacent
-		   if(board[index+1].equals((MARKS[currentPlayer]))) {
-			   if(board[index+2].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
+  public void winSwitch(int location) { //To be used in a for loop checking the winning condition
+	   switch(location) {
+		   case 0:
+		   {
+			   //Adjacent
+			   if(board[location+1].equals((MARKS[currentPlayer]))) {
+				   if(board[location+2].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
 			   }
+			   //Below
+			   else if (board[location+3].equals((MARKS[currentPlayer]))){
+				   if(board[location+6].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true(Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   //Diagnol(center)
+			   else if (board[location+4].equals((MARKS[currentPlayer]))){
+				   if(board[location+8].equals(MARKS[currentPlayer])) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   break;
 		   }
-		   //Below
-		   else if (board[index+3].equals((MARKS[currentPlayer]))){
-			   if(board[index+6].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true(Part D)
-				   //end game
-				   break;
+		   case 1:
+		   {
+			   //Adjacent
+			   if(board[location+1].equals((MARKS[currentPlayer]))) {
+				   if(board[location-1].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
 			   }
+			   //Below(Center)
+			   else if (board[location+3].equals((MARKS[currentPlayer]))){
+				   if(board[location+6].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true(Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   //Adjacent(Behind)
+			   else if (board[location-1].equals((MARKS[currentPlayer]))){
+				   if(board[location+1].equals(MARKS[currentPlayer])) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   break;
 		   }
-		   //Diagnol(center)
-		   else if (board[index+4].equals((MARKS[currentPlayer]))){
-			   if(board[index+8].equals(MARKS[currentPlayer])) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
+		   case 2:
+		   {
+			   //Diagnol(Center)
+			   if(board[location+2].equals((MARKS[currentPlayer]))) {
+				   if(board[location-2].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
 			   }
+			   //Below
+			   else if (board[location+3].equals((MARKS[currentPlayer]))){
+				   if(board[location+6].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true(Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   //Adjacent
+			   else if (board[location-1].equals((MARKS[currentPlayer]))){
+				   if(board[location-2].equals(MARKS[currentPlayer])) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   break;
 		   }
-	   }
-	   case 1:
-	   {
-		   //Adjacent
-		   if(board[index+1].equals((MARKS[currentPlayer]))) {
-			   if(board[index-1].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
+		   case 3:
+		   {
+			   //Adjacent
+			   if(board[location+1].equals((MARKS[currentPlayer]))) {
+				   if(board[location+2].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
 			   }
+			   //Below
+			   else if (board[location + 3].equals((MARKS[currentPlayer]))){
+				   if(board[location - 3].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true(Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   //Above
+			   else if (board[location -3].equals((MARKS[currentPlayer]))){
+				   if(board[location + 3].equals(MARKS[currentPlayer])) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   break;
 		   }
-		   //Below(Center)
-		   else if (board[index+3].equals((MARKS[currentPlayer]))){
-			   if(board[index+6].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true(Part D)
-				   //end game
+		   //Center, more checks than others
+		   case 4:
+		   {
+			   //Adjacent
+			   if(board[location+1].equals((MARKS[currentPlayer]))) {
+				   if(board[location -1].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   //Below
+			   else if (board[location+3].equals((MARKS[currentPlayer]))){
+				   if(board[location-3].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true(Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   //Diagnol(Below)
+			   else if (board[location+4].equals((MARKS[currentPlayer]))){
+				   if(board[location-4].equals(MARKS[currentPlayer])) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
 				   break;
 			   }
+			   //Adjacent(Behind)
+			   else if(board[location - 1].equals((MARKS[currentPlayer]))) {
+				   if(board[location + 1].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   //Above
+			   else if (board[location-3].equals((MARKS[currentPlayer]))){
+				   if(board[location+3].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true(Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   //Diagnol(Above)
+			   else if (board[location-4].equals((MARKS[currentPlayer]))){
+				   if(board[location+4].equals(MARKS[currentPlayer])) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   break;
 		   }
-		   //Adjacent(Behind)
-		   else if (board[index-1].equals((MARKS[currentPlayer]))){
-			   if(board[index+1].equals(MARKS[currentPlayer])) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
+		   case 5:
+		   {
+			   //Adjacent
+			   if(board[location-1].equals((MARKS[currentPlayer]))) {
+				   if(board[location-2].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
 			   }
-		   } 
-	   }
-	   case 2:
-	   {
-		   //Diagnol(Center)
-		   if(board[index+2].equals((MARKS[currentPlayer]))) {
-			   if(board[index-2].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
+			   //Below
+			   else if (board[location+3].equals((MARKS[currentPlayer]))){
+				   if(board[location-3].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true(Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
 			   }
+			   //Above
+			   else if (board[location-3].equals((MARKS[currentPlayer]))){
+				   if(board[location+3].equals(MARKS[currentPlayer])) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   break;
 		   }
-		   //Below
-		   else if (board[index+3].equals((MARKS[currentPlayer]))){
-			   if(board[index+6].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true(Part D)
-				   //end game
+		   case 6:
+		   {
+			   //Adjacent
+			   if(board[location+1].equals((MARKS[currentPlayer]))) {
+				   if(board[location+2].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   //Above
+			   else if (board[location-3].equals((MARKS[currentPlayer]))){
+				   if(board[location-6].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true(Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   //Diagnol
+			   else if (board[location-2].equals((MARKS[currentPlayer]))){
+				   if(board[location-4].equals(MARKS[currentPlayer])) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   break;
+		   }
+		   case 7:
+		   {
+			   //Adjacent
+			   if(board[location+1].equals((MARKS[currentPlayer]))) {
+				   if(board[location-1].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
+			   }
+			   //Above(Center)
+			   else if (board[location-3].equals((MARKS[currentPlayer]))){
+				   if(board[location-6].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true(Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
 				   break;
 			   }
-		   }
-		   //Adjacent
-		   else if (board[index-1].equals((MARKS[currentPlayer]))){
-			   if(board[index-2].equals(MARKS[currentPlayer])) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
+			   //Adjacent(Behind)
+			   else if (board[location-1].equals((MARKS[currentPlayer]))){
+				   if(board[location+1].equals(MARKS[currentPlayer])) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
 			   }
+			   break;
 		   }
-	   }
-	   case 3:
-	   {
-		   //Adjacent
-		   if(board[index+1].equals((MARKS[currentPlayer]))) {
-			   if(board[index+2].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
+		   case 8:
+		   {
+			   //Adjacent
+			   if(board[location-1].equals((MARKS[currentPlayer]))) {
+				   if(board[location-2].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
 			   }
-		   }
-		   //Below
-		   else if (board[index + 3].equals((MARKS[currentPlayer]))){
-			   if(board[index - 3].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true(Part D)
-				   //end game
-				   break;
+			   //Above
+			   else if (board[location-3].equals((MARKS[currentPlayer]))){
+				   if(board[location-6].equals((MARKS[currentPlayer]))) {
+					   //set winning boolean in currentPlayer to true(Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
 			   }
-		   }
-		   //Above
-		   else if (board[index -3].equals((MARKS[currentPlayer]))){
-			   if(board[index + 3].equals(MARKS[currentPlayer])) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
+			   //Diagnol(Center)
+			   else if (board[location-4].equals((MARKS[currentPlayer]))){
+				   if(board[location-8].equals(MARKS[currentPlayer])) {
+					   //set winning boolean in currentPlayer to true (Part D)
+					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+					   //end game
+					   break;
+				   }
 			   }
+			   break;
 		   }
-	   }
-	   //Center, more checks than others
-	   case 4:
-	   {
-		   //Adjacent
-		   if(board[index+1].equals((MARKS[currentPlayer]))) {
-			   if(board[index -1].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
-			   }
-		   }
-		   //Below
-		   else if (board[index+3].equals((MARKS[currentPlayer]))){
-			   if(board[index-3].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true(Part D)
-				   //end game
-				   break;
-			   }
-		   }
-		   //Diagnol(Below)
-		   else if (board[index+4].equals((MARKS[currentPlayer]))){
-			   if(board[index-4].equals(MARKS[currentPlayer])) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
-			   }
-		   }
-		   //Adjacent(Behind)
-		   else if(board[index - 1].equals((MARKS[currentPlayer]))) {
-			   if(board[index + 1].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
-			   }
-		   }
-		   //Above
-		   else if (board[index-3].equals((MARKS[currentPlayer]))){
-			   if(board[index+3].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true(Part D)
-				   //end game
-				   break;
-			   }
-		   }
-		   //Diagnol(Above)
-		   else if (board[index-4].equals((MARKS[currentPlayer]))){
-			   if(board[index+4].equals(MARKS[currentPlayer])) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
-			   }
-		   }
-	   }
-	   case 5:
-	   {
-		   //Adjacent
-		   if(board[index-1].equals((MARKS[currentPlayer]))) {
-			   if(board[index-2].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
-			   }
-		   }
-		   //Below
-		   else if (board[index+3].equals((MARKS[currentPlayer]))){
-			   if(board[index-3].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true(Part D)
-				   //end game
-				   break;
-			   }
-		   }
-		   //Above
-		   else if (board[index-3].equals((MARKS[currentPlayer]))){
-			   if(board[index+3].equals(MARKS[currentPlayer])) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
-			   }
-		   }
-	   }
-	   case 6:
-	   {
-		   //Adjacent
-		   if(board[index+1].equals((MARKS[currentPlayer]))) {
-			   if(board[index+2].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
-			   }
-		   }
-		   //Above
-		   else if (board[index+3].equals((MARKS[currentPlayer]))){
-			   if(board[index+6].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true(Part D)
-				   //end game
-				   break;
-			   }
-		   }
-		   //Diagnol
-		   else if (board[index-2].equals((MARKS[currentPlayer]))){
-			   if(board[index-4].equals(MARKS[currentPlayer])) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
-			   }
-		   }
-	   }
-	   case 7:
-	   {
-		   //Adjacent
-		   if(board[index+1].equals((MARKS[currentPlayer]))) {
-			   if(board[index-1].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
-			   }
-		   }
-		   //Above(Center)
-		   else if (board[index-3].equals((MARKS[currentPlayer]))){
-			   if(board[index-6].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true(Part D)
-				   //end game
-				   break;
-			   }
-		   }
-		   //Adjacent(Behind)
-		   else if (board[index-1].equals((MARKS[currentPlayer]))){
-			   if(board[index+1].equals(MARKS[currentPlayer])) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
-			   }
-		   }
-	   }
-	   case 8:
-	   {
-		   //Adjacent
-		   if(board[index-1].equals((MARKS[currentPlayer]))) {
-			   if(board[index-2].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
-			   }
-		   }
-		   //Above
-		   else if (board[index-3].equals((MARKS[currentPlayer]))){
-			   if(board[index-6].equals((MARKS[currentPlayer]))) {
-				   //set winning boolean in currentPlayer to true(Part D)
-				   //end game
-				   break;
-			   }
-		   }
-		   //Diagnol(Center)
-		   else if (board[index-4].equals((MARKS[currentPlayer]))){
-			   if(board[index-8].equals(MARKS[currentPlayer])) {
-				   //set winning boolean in currentPlayer to true (Part D)
-				   //end game
-				   break;
-			   }
-		   }
-	   }
 	   } //end of switch
    } //end of winSwitch
 } // end class TicTacToeServer
