@@ -72,7 +72,31 @@ public class TicTacToeClient extends JFrame implements Runnable
 
       setSize( 300, 300 ); // set size of window
       setVisible( true ); // show window
+      
+      /********Added by Omar*********/
+      JButton newButton = new JButton("New Game"); //Set up the New Game Button
+      JPanel buttonPanel = new JPanel(); //Make a panel for extra Buttons
+      
+      buttonPanel.setSize(50, 100);   	//Set size of the panel
+      add(buttonPanel, BorderLayout.WEST);	//Set position of panel
 
+      buttonPanel.add(newButton);   //Add New Button to button panel
+      buttonPanel.setVisible(false); //Set the Button Panel to be visible or not. Should be invisible by default.
+      
+      newButton.addActionListener( 	//Actionevent to clear game board on New Button Click
+    		  
+    		  new ActionListener()
+    		  {
+    		      public void actionPerformed(ActionEvent e)
+    		     {
+    			   boardPanel.revalidate();  
+    			   boardPanel.repaint();	  //repaints the board. In theory.
+    		     }   //end actionPerformed function
+    		   } //end ActionListener function
+    		 ); //End actionlistener event
+          
+      /*****************************/
+      
       startClient();
    } // end TicTacToeClient constructor
 
