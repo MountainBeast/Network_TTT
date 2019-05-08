@@ -29,11 +29,12 @@ public class TicTacToeServer extends JFrame
    private Lock gameLock; // to lock game for synchronization
    private Condition otherPlayerConnected; // to wait for other player
    private Condition otherPlayerTurn; // to wait for other player's turn
-   //***Edited: Added booleans/attributes below*** - DKC
+  // to be put in ss
+  //***Edited: Added booleans/attributes below*** - DKC
    private boolean matchWinner;
    private boolean matchDraw;
    private int winningPlayer; //for part D, working out kinks
-
+// to be put in ss
    // set up tic-tac-toe server and GUI that displays messages
    public TicTacToeServer()
    {
@@ -141,7 +142,8 @@ public class TicTacToeServer extends JFrame
       } // end while
 
       // if location not occupied, make move
-      if ( !isOccupied( location ) )
+     //to be moved ss
+     if ( !isOccupied( location ) )
       {
          //****Edited Lines: Win/Draw Condition Check goes after THIS Line****
          //Checking for draw:         
@@ -156,7 +158,7 @@ public class TicTacToeServer extends JFrame
         	 matchDraw = true;
          }
        //****End of edited lines****
-       
+       //to be moved ss
          currentPlayer = ( currentPlayer + 1 ) % 2; // change player
 
          // let new current player know that move occurred
@@ -368,7 +370,8 @@ public class TicTacToeServer extends JFrame
       } // end method setSuspended
    } // end class Player
    //Test win conditions method--Added code
-  public void winSwitch(int location) { //To be used in a for loop checking the winning condition
+ // to be moved ss
+ public void winSwitch(int location) { //To be used in a for loop checking the winning condition
 	   switch(location) {
 		   case 0:
 		   {
@@ -711,6 +714,7 @@ public class TicTacToeServer extends JFrame
 		   }
 	   } //end of switch
    } //end of winSwitch
+   //to be moved ss
 } // end class TicTacToeServer
 
 /**************************************************************************
