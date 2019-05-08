@@ -333,7 +333,34 @@ public class TicTacToeServer extends JFrame
             } // end catch
          } // end finally
       } // end method run
+     // Start a new game
+         void newGame1(char winner) {
+           repaint();
 
+           // Announce result of last game.  Ask user to play again.
+           String result;
+           int draws = 0;
+		int losses = 0;
+		int wins = 0;
+		if (winner==O) {
+             ++wins;
+             result = "You Win!";
+           }
+           else if (winner==X) {
+             ++losses;
+             result = "I Win!";
+           }
+           else {
+             result = "Tie";
+             ++draws;
+           }
+           if (JOptionPane.showConfirmDialog(null, 
+               "You have "+wins+ " wins, "+losses+" losses, "+draws+" draws\n"
+               +"Play again?", result, JOptionPane.YES_NO_OPTION)
+               !=JOptionPane.YES_OPTION) {
+             wins=losses=draws=0;
+           }
+           }
       // set whether or not thread is suspended
       public void setSuspended( boolean status )
       {
