@@ -179,143 +179,7 @@ public class TicTacToeServer extends JFrame
          return false; // location is not occupied
    } // end method isOccupied
 
-   // place code in this method to determine whether game over 
-   public boolean isGameOver()
-   {	   
-	   /************************************* Added Code *************************************/
-	   
-	   /**************************** Winner For X ****************************/
-	   
-	   //  Winner X - Top Row
-	   if ((board[0]=="X") && (board[1]=="X") && (board[2]=="X")){
-		   displayMessage( " Game Over!!! Player X is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 1;
-	   }
-	   
-	   //  Winner X - Middle Row
-	   else if ((board[3]=="X") && (board[4]=="X") && (board[5]=="X")){
-		   displayMessage( " Game Over!!! Player X is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 1;
-	   }
-	   
-	   //  Winner X - Bottom Row
-	   else if ((board[6]=="X") && (board[7]=="X") && (board[8]=="X")) {
-		   displayMessage( " Game Over!!! Player X is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 1;
-	   }
-	   
-	   //  Winner X - First Column
-	   else if ((board[0]=="X") && (board[3]=="X") && (board[6]=="X")) {
-		   displayMessage( " Game Over!!! Player X is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 1;
-	   }
-	   
-	   //  Winner X - Second Column
-	   else if ((board[1]=="X") && (board[4]=="X") && (board[7]=="X")) {
-		   displayMessage( " Game Over!!! Player X is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 1;
-	   }
-	   
-	   //  Winner X - Third Column
-	   else if ((board[2]=="X") && (board[5]=="X") && (board[8]=="X")) {
-		   displayMessage( " Game Over!!! Player X is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 1;
-	   }
-	   //  Winner X - Cross Left to Right
-	   else if ((board[0]=="X") && (board[4]=="X") && (board[8]=="X")) {
-		   displayMessage( " Game Over!!! Player X is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 1;
-	   }
-	   
-	   //  Winner X - Cross Right to Left
-	   else if ((board[2]=="X") && (board[4]=="X") && (board[6]=="X")) {
-		   displayMessage( " Game Over!!! Player X is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 1;
-	   }
-	   
-	   /**************************** Winner For O ****************************/
-	   
-	   //  Winner O - Top Row
-	   if ((board[0]=="O") && (board[1]=="O") && (board[2]=="O")){
-		   displayMessage( " Game Over!!! Player O is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 0;
-	   }
-	   
-	   //  Winner O - Middle Row
-	   else if ((board[3]=="O") && (board[4]=="O") && (board[5]=="O")){
-		   displayMessage( " Game Over!!! Player O is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 0;
-	   }
-	   
-	   //  Winner O - Bottom Row
-	   else if ((board[6]=="O") && (board[7]=="O") && (board[8]=="O")) {
-		   displayMessage( " Game Over!!! Player O is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 0;
-	   }
-	   
-	   //  Winner O - First Column
-	   else if ((board[0]=="O") && (board[3]=="O") && (board[6]=="O")) {
-		   displayMessage( " Game Over!!! Player O is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 0;
-	   }
-	   
-	   //  Winner O - Second Column
-	   else if ((board[1]=="O") && (board[4]=="O") && (board[7]=="O")) {
-		   displayMessage( " Game Over!!! Player O is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 0;
-	   }
-	   
-	   //  Winner O - Third Column
-	   else if ((board[2]=="O") && (board[5]=="O") && (board[8]=="O")) {
-		   displayMessage( " Game Over!!! Player O is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 0;
-	   }
-	   //  Winner O - Cross Left to Right
-	   else if ((board[0]=="O") && (board[4]=="O") && (board[8]=="O")) {
-		   displayMessage( " Game Over!!! Player O is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 0;
-	   }
-	   
-	   //  Winner O - Cross Right to Left
-	   else if ((board[2]=="O") && (board[4]=="O") && (board[6]=="O")) {
-		   displayMessage( " Game Over!!! Player O is the winner!" );
-		   gameOver = true;
-		   whoIsWinner = 0;
-	   }
-	   /**************************** End Winner For O ****************************/
-	   
-	   else if(((board[0] == "X")||(board[0] == "O")) && ((board[1] == "X")||(board[1] == "O")) &&
-			   ((board[2] == "X")||(board[2] == "O")) && ((board[3] == "X")||(board[3] == "O")) &&
-			   ((board[4] == "X")||(board[4] == "O")) && ((board[5] == "X")||(board[5] == "O")) &&
-			   ((board[6] == "X")||(board[6] == "O")) && ((board[7] == "X")||(board[7] == "O")) &&
-			   ((board[8] == "X")||(board[8] == "O"))) {
-			   displayMessage( " Game Over!!! No Winner!" );
-			   gameOver = true;
-			   whoIsWinner = 2;
-		   }
-		   
-	   else 
-		   gameOver = false;
-	   /************************************* End Added Code *************************************/
-	   
-	   return gameOver; // this is left as an exercise
-	   
-   } // end method isGameOver
+ // end method isGameOver
 
    // private inner class Player manages each Player as a runnable
    private class Player implements Runnable 
@@ -354,6 +218,195 @@ public class TicTacToeServer extends JFrame
          output.flush(); // flush output
       } // end method otherPlayerMoved
 
+      // place code in this method to determine whether game over 
+      public boolean isGameOver()
+      {	   
+   	   /************************************* Added Code *************************************/
+	      	   /* Edited below code to add game lock and output flush to win conditions
+	   Also placed isGameOver function in player class instead of before it. 0 OJA */
+   	   
+   	   /**************************** Winner For X ****************************/
+	   
+   	   //  Winner X - Top Row
+   	   if ((board[0]=="X") && (board[1]=="X") && (board[2]=="X")){
+   		   displayMessage( " Game Over!!! Player X is the winner!" );
+   		   output.format("Player X is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 1;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   
+   	   //  Winner X - Middle Row
+   	   else if ((board[3]=="X") && (board[4]=="X") && (board[5]=="X")){
+   		   displayMessage( " Game Over!!! Player X is the winner!" );
+   		   output.format("Player X is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 1;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   
+   	   //  Winner X - Bottom Row
+   	   else if ((board[6]=="X") && (board[7]=="X") && (board[8]=="X")) {
+   		   displayMessage( " Game Over!!! Player X is the winner!" );
+   		   output.format("Player X is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 1;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   
+   	   //  Winner X - First Column
+   	   else if ((board[0]=="X") && (board[3]=="X") && (board[6]=="X")) {
+   		   displayMessage( " Game Over!!! Player X is the winner!" );
+   		   output.format("Player X is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 1;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   
+   	   //  Winner X - Second Column
+   	   else if ((board[1]=="X") && (board[4]=="X") && (board[7]=="X")) {
+   		   displayMessage( " Game Over!!! Player X is the winner!" );
+   		   output.format("Player X is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 1;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   
+   	   //  Winner X - Third Column
+   	   else if ((board[2]=="X") && (board[5]=="X") && (board[8]=="X")) {
+   		   displayMessage( " Game Over!!! Player X is the winner!" );
+   		   output.format("Player X is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 1;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   //  Winner X - Cross Left to Right
+   	   else if ((board[0]=="X") && (board[4]=="X") && (board[8]=="X")) {
+   		   displayMessage( " Game Over!!! Player X is the winner!" );
+   		   output.format("Player X is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 1;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   
+   	   //  Winner X - Cross Right to Left
+   	   else if ((board[2]=="X") && (board[4]=="X") && (board[6]=="X")) {
+   		   displayMessage( " Game Over!!! Player X is the winner!" );
+   		   output.format("Player X is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 1;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   
+   	   /**************************** Winner For O ****************************/
+   	   
+   	   //  Winner O - Top Row
+   	   if ((board[0]=="O") && (board[1]=="O") && (board[2]=="O")){
+   		   displayMessage( " Game Over!!! Player O is the winner!" );
+   		   output.format("Player O is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 0;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   
+   	   //  Winner O - Middle Row
+   	   else if ((board[3]=="O") && (board[4]=="O") && (board[5]=="O")){
+   		   displayMessage( " Game Over!!! Player O is the winner!" );
+   		   output.format("Player O is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 0;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   
+   	   //  Winner O - Bottom Row
+   	   else if ((board[6]=="O") && (board[7]=="O") && (board[8]=="O")) {
+   		   displayMessage( " Game Over!!! Player O is the winner!" );
+   		   output.format("Player O is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 0;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   
+   	   //  Winner O - First Column
+   	   else if ((board[0]=="O") && (board[3]=="O") && (board[6]=="O")) {
+   		   displayMessage( " Game Over!!! Player O is the winner!" );
+   		   output.format("Player O is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 0;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   
+   	   //  Winner O - Second Column
+   	   else if ((board[1]=="O") && (board[4]=="O") && (board[7]=="O")) {
+   		   displayMessage( " Game Over!!! Player O is the winner!" );
+   		   output.format("Player O is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 0;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   
+   	   //  Winner O - Third Column
+   	   else if ((board[2]=="O") && (board[5]=="O") && (board[8]=="O")) {
+   		   displayMessage( " Game Over!!! Player O is the winner!" );
+   		   output.format("Player O is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 0;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   //  Winner O - Cross Left to Right
+   	   else if ((board[0]=="O") && (board[4]=="O") && (board[8]=="O")) {
+   		   displayMessage( " Game Over!!! Player O is the winner!" );
+   		   output.format("Player O is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 0;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   
+   	   //  Winner O - Cross Right to Left
+   	   else if ((board[2]=="O") && (board[4]=="O") && (board[6]=="O")) {
+   		   displayMessage( " Game Over!!! Player O is the winner!" );
+   		   output.format("Player O is the winner!");
+   		   gameOver = true;
+   		   whoIsWinner = 0;
+   		   gameLock.lock();
+   		   output.flush();
+   	   }
+   	   /**************************** End Winner For O ****************************/
+   	   
+   	   else if(((board[0] == "X")||(board[0] == "O")) && ((board[1] == "X")||(board[1] == "O")) &&
+   			   ((board[2] == "X")||(board[2] == "O")) && ((board[3] == "X")||(board[3] == "O")) &&
+   			   ((board[4] == "X")||(board[4] == "O")) && ((board[5] == "X")||(board[5] == "O")) &&
+   			   ((board[6] == "X")||(board[6] == "O")) && ((board[7] == "X")||(board[7] == "O")) &&
+   			   ((board[8] == "X")||(board[8] == "O"))) {
+   			   displayMessage( " Game Over!!! No Winner!" );
+   			   output.format("It's a TIE!");
+   			   gameOver = true;
+   			   whoIsWinner = 2;
+   			   gameLock.lock();
+   		   }
+   		   
+   	   else 
+   		   gameOver = false;
+   	   /************************************* End Added Code *************************************/
+   	   
+   	   return gameOver; // this is left as an exercise
+   	   
+      }
       // control thread's execution
       public void run()
       {
@@ -400,24 +453,29 @@ public class TicTacToeServer extends JFrame
             } // end else
 
             /************************************* Added Code *************************************/
+            
+            
             if (isGameOver() == true) {
             	
             	// Will display if O Winner
             	if (whoIsWinner == 0) {
             		output.format( "O is the Winner!\n" );
                     output.flush(); // flush output
+                    gameLock.lock();
             	}
             	
             	// Will display if X Winner
             	if (whoIsWinner == 1) {
             		output.format( "X is the Winner!\n" ); 
                     output.flush(); // flush output
+                    gameLock.lock();
             	}
             	
             	// Will display if No Winner
             	if (whoIsWinner == 2) {
             		output.format( "O is the Winner!\n" ); 
                     output.flush(); // flush output
+                    gameLock.lock();
             	}
             }
             /************************************* End Added Code *************************************/
@@ -479,5 +537,4 @@ public class TicTacToeServer extends JFrame
  * and publisher shall not be liable in any event for incidental or       *
  * consequential damages in connection with, or arising out of, the       *
  * furnishing, performance, or use of these programs.                     *
- *************************************************************************/
-
+*************************************************************************/
