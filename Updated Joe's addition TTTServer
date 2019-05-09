@@ -176,8 +176,14 @@ public class TicTacToeServer extends JFrame
          } // end try
         
          finally
-         {
-            gameLock.unlock(); // unlock game after signaling
+         { /*********Added if/else behind the unlock*************~DKC*/
+        	if(matchWinner == false && matchDraw == false) {
+        		gameLock.unlock(); // unlock game after signaling
+        	}
+        	else {
+        		gameLock.lock(); //lock other player's thread if game is over
+        	}
+		/**********End edits********************/
          } // end finally
 
          return true; // notify player that move was valid
@@ -226,7 +232,20 @@ public class TicTacToeServer extends JFrame
             System.exit( 1 );
          } // end catch
       } // end Player constructor
-
+      /****************************Added Code**************************************/
+      //***edited in: added in a command that can send messages to the players**** ~DKC
+      //Winning message
+      public void winMessage() {
+    	  output.format("Player " + MARKS[winningPlayer] + " has won!\n");
+    	  output.flush();
+      }
+      //Draw message
+      public void drawMessage() {
+    	  output.format("Draw! Neither player wins!");
+    	  output.flush();
+      }
+      //****end of edited lines****
+      /****************************************************************************/
       // send message that other player moved
       public void otherPlayerMoved( int location )
       {
@@ -243,182 +262,54 @@ public class TicTacToeServer extends JFrame
 	   Also placed isGameOver function in player class instead of before it. 0 OJA */
    	   
    	   /**************************** Winner For X ****************************/
-	   
-   	   //  Winner X - Top Row
-   	   if ((board[0]=="X") && (board[1]=="X") && (board[2]=="X")){
-   		   displayMessage( " Game Over!!! Player X is the winner!" );
-   		   output.format("Player X is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 1;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   
-   	   //  Winner X - Middle Row
-   	   else if ((board[3]=="X") && (board[4]=="X") && (board[5]=="X")){
-   		   displayMessage( " Game Over!!! Player X is the winner!" );
-   		   output.format("Player X is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 1;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   
-   	   //  Winner X - Bottom Row
-   	   else if ((board[6]=="X") && (board[7]=="X") && (board[8]=="X")) {
-   		   displayMessage( " Game Over!!! Player X is the winner!" );
-   		   output.format("Player X is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 1;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   
-   	   //  Winner X - First Column
-   	   else if ((board[0]=="X") && (board[3]=="X") && (board[6]=="X")) {
-   		   displayMessage( " Game Over!!! Player X is the winner!" );
-   		   output.format("Player X is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 1;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   
-   	   //  Winner X - Second Column
-   	   else if ((board[1]=="X") && (board[4]=="X") && (board[7]=="X")) {
-   		   displayMessage( " Game Over!!! Player X is the winner!" );
-   		   output.format("Player X is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 1;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   
-   	   //  Winner X - Third Column
-   	   else if ((board[2]=="X") && (board[5]=="X") && (board[8]=="X")) {
-   		   displayMessage( " Game Over!!! Player X is the winner!" );
-   		   output.format("Player X is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 1;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   //  Winner X - Cross Left to Right
-   	   else if ((board[0]=="X") && (board[4]=="X") && (board[8]=="X")) {
-   		   displayMessage( " Game Over!!! Player X is the winner!" );
-   		   output.format("Player X is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 1;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   
-   	   //  Winner X - Cross Right to Left
-   	   else if ((board[2]=="X") && (board[4]=="X") && (board[6]=="X")) {
-   		   displayMessage( " Game Over!!! Player X is the winner!" );
-   		   output.format("Player X is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 1;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   
-   	   /**************************** Winner For O ****************************/
-   	   
-   	   //  Winner O - Top Row
-   	   if ((board[0]=="O") && (board[1]=="O") && (board[2]=="O")){
-   		   displayMessage( " Game Over!!! Player O is the winner!" );
-   		   output.format("Player O is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 0;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   
-   	   //  Winner O - Middle Row
-   	   else if ((board[3]=="O") && (board[4]=="O") && (board[5]=="O")){
-   		   displayMessage( " Game Over!!! Player O is the winner!" );
-   		   output.format("Player O is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 0;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   
-   	   //  Winner O - Bottom Row
-   	   else if ((board[6]=="O") && (board[7]=="O") && (board[8]=="O")) {
-   		   displayMessage( " Game Over!!! Player O is the winner!" );
-   		   output.format("Player O is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 0;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   
-   	   //  Winner O - First Column
-   	   else if ((board[0]=="O") && (board[3]=="O") && (board[6]=="O")) {
-   		   displayMessage( " Game Over!!! Player O is the winner!" );
-   		   output.format("Player O is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 0;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   
-   	   //  Winner O - Second Column
-   	   else if ((board[1]=="O") && (board[4]=="O") && (board[7]=="O")) {
-   		   displayMessage( " Game Over!!! Player O is the winner!" );
-   		   output.format("Player O is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 0;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   
-   	   //  Winner O - Third Column
-   	   else if ((board[2]=="O") && (board[5]=="O") && (board[8]=="O")) {
-   		   displayMessage( " Game Over!!! Player O is the winner!" );
-   		   output.format("Player O is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 0;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   //  Winner O - Cross Left to Right
-   	   else if ((board[0]=="O") && (board[4]=="O") && (board[8]=="O")) {
-   		   displayMessage( " Game Over!!! Player O is the winner!" );
-   		   output.format("Player O is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 0;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   
-   	   //  Winner O - Cross Right to Left
-   	   else if ((board[2]=="O") && (board[4]=="O") && (board[6]=="O")) {
-   		   displayMessage( " Game Over!!! Player O is the winner!" );
-   		   output.format("Player O is the winner!");
-   		   gameOver = true;
-   		   whoIsWinner = 0;
-   		   gameLock.lock();
-   		   output.flush();
-   	   }
-   	   /**************************** End Winner For O ****************************/
-   	   
-   	   else if(((board[0] == "X")||(board[0] == "O")) && ((board[1] == "X")||(board[1] == "O")) &&
-   			   ((board[2] == "X")||(board[2] == "O")) && ((board[3] == "X")||(board[3] == "O")) &&
-   			   ((board[4] == "X")||(board[4] == "O")) && ((board[5] == "X")||(board[5] == "O")) &&
-   			   ((board[6] == "X")||(board[6] == "O")) && ((board[7] == "X")||(board[7] == "O")) &&
-   			   ((board[8] == "X")||(board[8] == "O"))) {
-   			   displayMessage( " Game Over!!! No Winner!" );
-   			   output.format("It's a TIE!");
-   			   gameOver = true;
-   			   whoIsWinner = 2;
-   			   gameLock.lock();
+	//****EDITED CODE:Returns true IF there is a winner or the match is a draw***** ~DKC
+   	   //Check if X has any win conditions
+   	   for(int i = 0; i < board.length; i++) {
+   		   if(board[i].equals(MARKS[PLAYER_X])) {
+   			   winSwitch(i, PLAYER_X);
    		   }
-   		   
-   	   else 
-   		   gameOver = false;
+   	   }
+   	   //Check X wins
+   	   if(matchWinner == true) {
+   		   winningPlayer = PLAYER_X;
+   		   //Announce results to players
+   		   players[PLAYER_X].winMessage();
+   		   players[PLAYER_O].winMessage();
+   		   gameLock.lock(); //lock other player thread
+   		   return true;
+   	   }
+   	   else {
+   		   //Check if O has any win conditions
+   		   for(int i = 0; i < board.length; i++) {
+   			   if(board[i].equals(MARKS[PLAYER_O])) {
+   				   winSwitch(i, PLAYER_O);
+   			   }
+   		   }
+   		   if(matchWinner == true) {
+   			   winningPlayer = PLAYER_O;
+   			   //Announce results to players
+   			   players[PLAYER_X].winMessage();
+   			   players[PLAYER_O].winMessage();
+   			   gameLock.lock();
+   			   return true;
+   		   }
+   	   }
+   	   //Check for draw
+   	   int empty = 0;
+   	   for(int i = 0; i < board.length; i++) {
+   		   if(board[i].equals("")) {
+   			   empty++;
+   		   }
+   	   }
+   	   if(matchWinner == false && empty == 0) { //draw condition, no player wins
+   		   players[PLAYER_X].drawMessage();
+   		   players[PLAYER_O].drawMessage();
+   		   gameLock.lock();
+   		   return true;
+   	   }
+   	  //****END EDITED CODE****
+         return false; // this is left as an exercise
+      } // end method isGameOver
    	   /************************************* End Added Code *************************************/
    	   
    	   return gameOver; // this is left as an exercise
@@ -539,36 +430,33 @@ public class TicTacToeServer extends JFrame
          suspended = status; // set value of suspended
       } // end method setSuspended
    } // end class Player
-   //addded by SS for DKC 5/8
-    public void winSwitch(int location) { //To be used in a for loop checking the winning condition
+   /**************addded by SS for DKC 5/8. Edited by DKC 05/09***************************/
+   public void winSwitch(int location, int currMark) { //To be used in a for loop checking the winning condition
 	   switch(location) {
 		   case 0:
 		   {
 			   //Adjacent
-			   if(board[location+1].equals((MARKS[currentPlayer]))) {
-				   if(board[location+2].equals((MARKS[currentPlayer]))) {
-					   //set winning boolean to true/announce to player
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+			   if(board[location+1].equals((MARKS[currMark]))) {
+				   if(board[location+2].equals((MARKS[currMark]))) {
+					   //set winning boolean in currMark to true (Part D)
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Below
-			   else if (board[location+3].equals((MARKS[currentPlayer]))){
-				   if(board[location+6].equals((MARKS[currentPlayer]))) {
+			   else if (board[location+3].equals((MARKS[currMark]))){
+				   if(board[location+6].equals((MARKS[currMark]))) {
 					   //set winning boolean in currentPlayer to true(Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Diagnol(center)
-			   else if (board[location+4].equals((MARKS[currentPlayer]))){
-				   if(board[location+8].equals(MARKS[currentPlayer])) {
-					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+			   else if (board[location+4].equals((MARKS[currMark]))){
+				   if(board[location+8].equals(MARKS[currMark])) {
+					   //set winning boolean in currMark to true (Part D)
 					   matchWinner = true;
 					   //end game
 					   break;
@@ -579,30 +467,27 @@ public class TicTacToeServer extends JFrame
 		   case 1:
 		   {
 			   //Adjacent
-			   if(board[location+1].equals((MARKS[currentPlayer]))) {
-				   if(board[location-1].equals((MARKS[currentPlayer]))) {
+			   if(board[location+1].equals((MARKS[currMark]))) {
+				   if(board[location-1].equals((MARKS[currMark]))) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Below(Center)
-			   else if (board[location+3].equals((MARKS[currentPlayer]))){
-				   if(board[location+6].equals((MARKS[currentPlayer]))) {
-					   //set winning boolean in currentPlayer to true(Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+			   else if (board[location+3].equals((MARKS[currMark]))){
+				   if(board[location+6].equals((MARKS[currMark]))) {
+					   //set winning boolean in currMark to true(Part D)
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Adjacent(Behind)
-			   else if (board[location-1].equals((MARKS[currentPlayer]))){
-				   if(board[location+1].equals(MARKS[currentPlayer])) {
-					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+			   else if (board[location-1].equals((MARKS[currMark]))){
+				   if(board[location+1].equals(MARKS[currMark])) {
+					   //set winning boolean in currMark to true (Part D)
 					   matchWinner = true;
 					   //end game
 					   break;
@@ -613,30 +498,27 @@ public class TicTacToeServer extends JFrame
 		   case 2:
 		   {
 			   //Diagnol(Center)
-			   if(board[location+2].equals((MARKS[currentPlayer]))) {
-				   if(board[location-2].equals((MARKS[currentPlayer]))) {
+			   if(board[location+2].equals((MARKS[currMark]))) {
+				   if(board[location-2].equals((MARKS[currMark]))) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Below
-			   else if (board[location+3].equals((MARKS[currentPlayer]))){
-				   if(board[location+6].equals((MARKS[currentPlayer]))) {
+			   else if (board[location+3].equals((MARKS[currMark]))){
+				   if(board[location+6].equals((MARKS[currMark]))) {
 					   //set winning boolean in currentPlayer to true(Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Adjacent
-			   else if (board[location-1].equals((MARKS[currentPlayer]))){
-				   if(board[location-2].equals(MARKS[currentPlayer])) {
+			   else if (board[location-1].equals((MARKS[currMark]))){
+				   if(board[location-2].equals(MARKS[currMark])) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
@@ -647,30 +529,27 @@ public class TicTacToeServer extends JFrame
 		   case 3:
 		   {
 			   //Adjacent
-			   if(board[location+1].equals((MARKS[currentPlayer]))) {
-				   if(board[location+2].equals((MARKS[currentPlayer]))) {
+			   if(board[location+1].equals((MARKS[currMark]))) {
+				   if(board[location+2].equals((MARKS[currMark]))) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Below
-			   else if (board[location + 3].equals((MARKS[currentPlayer]))){
-				   if(board[location - 3].equals((MARKS[currentPlayer]))) {
-					   //set winning boolean in currentPlayer to true(Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+			   else if (board[location + 3].equals((MARKS[currMark]))){
+				   if(board[location - 3].equals((MARKS[currMark]))) {
+					   //set winning boolean in currMark to true(Part D)
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Above
-			   else if (board[location -3].equals((MARKS[currentPlayer]))){
-				   if(board[location + 3].equals(MARKS[currentPlayer])) {
+			   else if (board[location -3].equals((MARKS[currMark]))){
+				   if(board[location + 3].equals(MARKS[currMark])) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
@@ -682,30 +561,27 @@ public class TicTacToeServer extends JFrame
 		   case 4:
 		   {
 			   //Adjacent
-			   if(board[location+1].equals((MARKS[currentPlayer]))) {
-				   if(board[location -1].equals((MARKS[currentPlayer]))) {
-					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+			   if(board[location+1].equals((MARKS[currMark]))) {
+				   if(board[location -1].equals((MARKS[currMark]))) {
+					   //set winning boolean in currMark to true (Part D)
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Below
-			   else if (board[location+3].equals((MARKS[currentPlayer]))){
-				   if(board[location-3].equals((MARKS[currentPlayer]))) {
-					   //set winning boolean in currentPlayer to true(Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+			   else if (board[location+3].equals((MARKS[currMark]))){
+				   if(board[location-3].equals((MARKS[currMark]))) {
+					   //set winning boolean in currMark to true(Part D)
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Diagnol(Below)
-			   else if (board[location+4].equals((MARKS[currentPlayer]))){
-				   if(board[location-4].equals(MARKS[currentPlayer])) {
+			   else if (board[location+4].equals((MARKS[currMark]))){
+				   if(board[location-4].equals(MARKS[currMark])) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
@@ -713,30 +589,27 @@ public class TicTacToeServer extends JFrame
 				   break;
 			   }
 			   //Adjacent(Behind)
-			   else if(board[location - 1].equals((MARKS[currentPlayer]))) {
-				   if(board[location + 1].equals((MARKS[currentPlayer]))) {
+			   else if(board[location - 1].equals((MARKS[currMark]))) {
+				   if(board[location + 1].equals((MARKS[currMark]))) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Above
-			   else if (board[location-3].equals((MARKS[currentPlayer]))){
-				   if(board[location+3].equals((MARKS[currentPlayer]))) {
+			   else if (board[location-3].equals((MARKS[currMark]))){
+				   if(board[location+3].equals((MARKS[currMark]))) {
 					   //set winning boolean in currentPlayer to true(Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Diagnol(Above)
-			   else if (board[location-4].equals((MARKS[currentPlayer]))){
-				   if(board[location+4].equals(MARKS[currentPlayer])) {
+			   else if (board[location-4].equals((MARKS[currMark]))){
+				   if(board[location+4].equals(MARKS[currMark])) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
@@ -747,30 +620,27 @@ public class TicTacToeServer extends JFrame
 		   case 5:
 		   {
 			   //Adjacent
-			   if(board[location-1].equals((MARKS[currentPlayer]))) {
-				   if(board[location-2].equals((MARKS[currentPlayer]))) {
+			   if(board[location-1].equals((MARKS[currMark]))) {
+				   if(board[location-2].equals((MARKS[currMark]))) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Below
-			   else if (board[location+3].equals((MARKS[currentPlayer]))){
-				   if(board[location-3].equals((MARKS[currentPlayer]))) {
+			   else if (board[location+3].equals((MARKS[currMark]))){
+				   if(board[location-3].equals((MARKS[currMark]))) {
 					   //set winning boolean in currentPlayer to true(Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Above
-			   else if (board[location-3].equals((MARKS[currentPlayer]))){
-				   if(board[location+3].equals(MARKS[currentPlayer])) {
+			   else if (board[location-3].equals((MARKS[currMark]))){
+				   if(board[location+3].equals(MARKS[currMark])) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
@@ -781,30 +651,27 @@ public class TicTacToeServer extends JFrame
 		   case 6:
 		   {
 			   //Adjacent
-			   if(board[location+1].equals((MARKS[currentPlayer]))) {
-				   if(board[location+2].equals((MARKS[currentPlayer]))) {
-					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
+			   if(board[location+1].equals((MARKS[currMark]))) {
+				   if(board[location+2].equals((MARKS[currMark]))) {
+					   //set winning boolean in currMark to true (Part D)
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Above
-			   else if (board[location-3].equals((MARKS[currentPlayer]))){
-				   if(board[location-6].equals((MARKS[currentPlayer]))) {
+			   else if (board[location-3].equals((MARKS[currMark]))){
+				   if(board[location-6].equals((MARKS[currMark]))) {
 					   //set winning boolean in currentPlayer to true(Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Diagnol
-			   else if (board[location-2].equals((MARKS[currentPlayer]))){
-				   if(board[location-4].equals(MARKS[currentPlayer])) {
+			   else if (board[location-2].equals((MARKS[currMark]))){
+				   if(board[location-4].equals(MARKS[currMark])) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
@@ -815,20 +682,18 @@ public class TicTacToeServer extends JFrame
 		   case 7:
 		   {
 			   //Adjacent
-			   if(board[location+1].equals((MARKS[currentPlayer]))) {
-				   if(board[location-1].equals((MARKS[currentPlayer]))) {
+			   if(board[location+1].equals((MARKS[currMark]))) {
+				   if(board[location-1].equals((MARKS[currMark]))) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Above(Center)
-			   else if (board[location-3].equals((MARKS[currentPlayer]))){
-				   if(board[location-6].equals((MARKS[currentPlayer]))) {
+			   else if (board[location-3].equals((MARKS[currMark]))){
+				   if(board[location-6].equals((MARKS[currMark]))) {
 					   //set winning boolean in currentPlayer to true(Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
@@ -836,10 +701,9 @@ public class TicTacToeServer extends JFrame
 				   break;
 			   }
 			   //Adjacent(Behind)
-			   else if (board[location-1].equals((MARKS[currentPlayer]))){
-				   if(board[location+1].equals(MARKS[currentPlayer])) {
+			   else if (board[location-1].equals((MARKS[currMark]))){
+				   if(board[location+1].equals(MARKS[currMark])) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
@@ -850,30 +714,27 @@ public class TicTacToeServer extends JFrame
 		   case 8:
 		   {
 			   //Adjacent
-			   if(board[location-1].equals((MARKS[currentPlayer]))) {
-				   if(board[location-2].equals((MARKS[currentPlayer]))) {
+			   if(board[location-1].equals((MARKS[currMark]))) {
+				   if(board[location-2].equals((MARKS[currMark]))) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Above
-			   else if (board[location-3].equals((MARKS[currentPlayer]))){
-				   if(board[location-6].equals((MARKS[currentPlayer]))) {
+			   else if (board[location-3].equals((MARKS[currMark]))){
+				   if(board[location-6].equals((MARKS[currMark]))) {
 					   //set winning boolean in currentPlayer to true(Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
 				   }
 			   }
 			   //Diagnol(Center)
-			   else if (board[location-4].equals((MARKS[currentPlayer]))){
-				   if(board[location-8].equals(MARKS[currentPlayer])) {
+			   else if (board[location-4].equals((MARKS[currMark]))){
+				   if(board[location-8].equals(MARKS[currMark])) {
 					   //set winning boolean in currentPlayer to true (Part D)
-					   System.out.println( "Player " + MARKS[currentPlayer] + " has won!\n" );
 					   matchWinner = true;
 					   //end game
 					   break;
@@ -883,6 +744,7 @@ public class TicTacToeServer extends JFrame
 		   }
 	   } //end of switch
    } //end of winSwitch
+   /**********************************end of edited code***************************************/
 } // end class TicTacToeServer
 
 /**************************************************************************
