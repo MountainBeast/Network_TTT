@@ -145,8 +145,11 @@ public class TicTacToeServer extends JFrame
             gameLock.unlock(); // unlock game after waiting
          } // end finally
       } // end while
-	if ( !isOccupied( location ) ) // added by SS for DKC 5/8
+      // if location not occupied, make move
+      if ( !isOccupied( location ) )
       {
+    	 
+         board[ location ] = MARKS[ currentPlayer ]; // set move on board
          //****Edited Lines: Win/Draw Condition Check goes after THIS Line****
          //Checking for draw:         
          int empty = 0;
@@ -160,10 +163,6 @@ public class TicTacToeServer extends JFrame
         	 matchDraw = true;
          }
        //****End of edited lines****
-      // if location not occupied, make move
-      if ( !isOccupied( location ) )
-      {
-         board[ location ] = MARKS[ currentPlayer ]; // set move on board
          currentPlayer = ( currentPlayer + 1 ) % 2; // change player
 
          // let new current player know that move occurred
@@ -183,10 +182,10 @@ public class TicTacToeServer extends JFrame
 
          return true; // notify player that move was valid
       } // end if
-      else // move was not valid
+      else   // move was not valid
          return false; // notify player that move was invalid
    } // end method validateAndMove
-
+   
    // determine whether location is occupied
    public boolean isOccupied( int location )
    {
