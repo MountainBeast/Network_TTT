@@ -18,7 +18,7 @@ import java.util.concurrent.locks.Condition;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-
+import javax.swing.*;
 public class TicTacToeServer extends JFrame 
 {
    private String[] board = new String[ 9 ]; // tic-tac-toe board
