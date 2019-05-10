@@ -86,7 +86,7 @@ public class TicTacToeClient extends JFrame implements Runnable
       add(buttonPanel, BorderLayout.WEST);	//Set position of panel
 
       buttonPanel.add(newButton);   //Add New Button to button panel
-      buttonPanel.setVisible(false); //Set the Button Panel to be visible or not. Should be invisible by default.
+      buttonPanel.setVisible(true); //Set the Button Panel to be visible or not. Should be invisible by default.
       
       newButton.addActionListener( 	//Actionevent to clear game board on New Button Click
     		  
