@@ -150,19 +150,6 @@ public class TicTacToeServer extends JFrame
       {
     	 
          board[ location ] = MARKS[ currentPlayer ]; // set move on board
-         //****Edited Lines: Win/Draw Condition Check goes after THIS Line****
-         //Checking for draw:         
-         int empty = 0;
-         for(int i = 0; i < board.length; i++) {
-        	 if(board[i].equals("")) {
-        		 empty++;
-        	 }
-         }
-         winSwitch(location); //Check if current player has won. If any wins, triggers end of match
-         if(matchWinner == false && empty == 0) {
-        	 matchDraw = true;
-         }
-       //****End of edited lines****
          currentPlayer = ( currentPlayer + 1 ) % 2; // change player
 
          // let new current player know that move occurred
@@ -311,10 +298,6 @@ public class TicTacToeServer extends JFrame
          return false; // this is left as an exercise
       } // end method isGameOver
    	   /************************************* End Added Code *************************************/
-   	   
-   	   return gameOver; // this is left as an exercise
-   	   
-      }
       // control thread's execution
       public void run()
       {
