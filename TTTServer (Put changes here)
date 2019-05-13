@@ -213,7 +213,7 @@ public class TicTacToeServer extends JFrame
 			   winningPlayer = PLAYER_O;
 			   return true;
 		   }
-	   }
+	   }//
 	   //Check for draw
 	   int empty = 0;
 	   for(int i = 0; i < board.length; i++) {
