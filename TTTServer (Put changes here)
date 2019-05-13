@@ -1,9 +1,3 @@
-// I edited the code to clean up the validation for the winner and loser.  
-// I did not want to mess with the other code that was already established.
-// I will notify you all in the messenger program we are using.
-
-// Fig. 27.13: TicTacToeServer.java
-// Server side of client/server Tic-Tac-Toe program.
 import java.awt.BorderLayout;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -19,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.*;
-public class TicTacToeServer extends JFrame 
+public class TicTacToeServerGit extends JFrame 
 {
    private String[] board = new String[ 9 ]; // tic-tac-toe board
    private JTextArea outputArea; // for outputting moves
@@ -41,7 +35,7 @@ public class TicTacToeServer extends JFrame
    private int winningPlayer; //for part D, working out kinks
 
    // set up tic-tac-toe server and GUI that displays messages
-   public TicTacToeServer()
+   public TicTacToeServerGit()
    {
       super( "Tic-Tac-Toe Server" ); // set title of window
 
@@ -105,7 +99,12 @@ public class TicTacToeServer extends JFrame
       } // end try
       finally
       {
-         gameLock.unlock(); // unlock game after signalling player X
+      	if(matchWinner == false && matchDraw == false) {
+    		gameLock.unlock(); // unlock game after signaling
+    	}
+    	else {
+    		gameLock.lock(); //lock other player's thread if game is over
+    	}
       } // end finally
    } // end method execute
    
@@ -163,14 +162,8 @@ public class TicTacToeServer extends JFrame
          } // end try
         
          finally
-         { /*********Added if/else behind the unlock*************~DKC*/
-        	if(matchWinner == false && matchDraw == false) {
-        		gameLock.unlock(); // unlock game after signaling
-        	}
-        	else {
-        		gameLock.lock(); //lock other player's thread if game is over
-        	}
-		/**********End edits********************/
+         {
+            gameLock.unlock(); // unlock game after signaling
          } // end finally
 
          return true; // notify player that move was valid
@@ -188,7 +181,53 @@ public class TicTacToeServer extends JFrame
       else
          return false; // location is not occupied
    } // end method isOccupied
-
+   public boolean isGameOver()
+   {	   
+	   /************************************* Added Code *************************************/
+	      	   /* Edited below code to add game lock and output flush to win conditions
+	   Also placed isGameOver function in player class instead of before it. 0 OJA */
+	   
+	   /**************************** Winner For X ****************************/
+	   
+ 	//****EDITED CODE:Returns true IF there is a winner or the match is a draw****
+	   //Check if X has any win conditions
+	   for(int i = 0; i < board.length; i++) {
+		   if(board[i].equals(MARKS[PLAYER_X])) {
+			   winSwitch(i, PLAYER_X);
+		   }
+	   }
+	   //Check X wins
+	   if(matchWinner == true) {
+		   winningPlayer = PLAYER_X;
+		   //Announce results to players
+		   return true;
+	   }
+	   else {
+		   //Check if O has any win conditions
+		   for(int i = 0; i < board.length; i++) {
+			   if(board[i].equals(MARKS[PLAYER_O])) {
+				   winSwitch(i, PLAYER_O);
+			   }
+		   }
+		   if(matchWinner == true) {
+			   winningPlayer = PLAYER_O;
+			   return true;
+		   }
+	   }
+	   //Check for draw
+	   int empty = 0;
+	   for(int i = 0; i < board.length; i++) {
+		   if(board[i].equals("")) {
+			   empty++;
+		   }
+	   }
+	   if(matchWinner == false && empty == 0) { //draw condition, no player wins
+		   matchDraw = true;
+		   return true;
+	   }
+	  //****END EDITED CODE****
+      return false; // this is left as an exercise
+   } // end method isGameOver
  // end method isGameOver
 
    // private inner class Player manages each Player as a runnable
@@ -228,7 +267,7 @@ public class TicTacToeServer extends JFrame
       }
       //Draw message
       public void drawMessage() {
-    	  output.format("Draw! Neither player wins!");
+    	  output.format("Draw! Neither player wins!\n");
     	  output.flush();
       }
       //****end of edited lines****
@@ -242,62 +281,9 @@ public class TicTacToeServer extends JFrame
       } // end method otherPlayerMoved
 
       // place code in this method to determine whether game over 
-      public boolean isGameOver()
-      {	   
-   	   /************************************* Added Code *************************************/
-	      	   /* Edited below code to add game lock and output flush to win conditions
-	   Also placed isGameOver function in player class instead of before it. 0 OJA */
-   	   
-   	   /**************************** Winner For X ****************************/
-	//****EDITED CODE:Returns true IF there is a winner or the match is a draw***** ~DKC
-   	   //Check if X has any win conditions
-   	   for(int i = 0; i < board.length; i++) {
-   		   if(board[i].equals(MARKS[PLAYER_X])) {
-   			   winSwitch(i, PLAYER_X);
-   		   }
-   	   }
-   	   //Check X wins
-   	   if(matchWinner == true) {
-   		   winningPlayer = PLAYER_X;
-   		   //Announce results to players
-   		   players[PLAYER_X].winMessage();
-   		   players[PLAYER_O].winMessage();
-   		   gameLock.lock(); //lock other player thread
-   		   return true;
-   	   }
-   	   else {
-   		   //Check if O has any win conditions
-   		   for(int i = 0; i < board.length; i++) {
-   			   if(board[i].equals(MARKS[PLAYER_O])) {
-   				   winSwitch(i, PLAYER_O);
-   			   }
-   		   }
-   		   if(matchWinner == true) {
-   			   winningPlayer = PLAYER_O;
-   			   //Announce results to players
-   			   players[PLAYER_X].winMessage();
-   			   players[PLAYER_O].winMessage();
-   			   gameLock.lock();
-   			   return true;
-   		   }
-   	   }
-   	   //Check for draw
-   	   int empty = 0;
-   	   for(int i = 0; i < board.length; i++) {
-   		   if(board[i].equals("")) {
-   			   empty++;
-   		   }
-   	   }
-   	   if(matchWinner == false && empty == 0) { //draw condition, no player wins
-   		   players[PLAYER_X].drawMessage();
-   		   players[PLAYER_O].drawMessage();
-   		   gameLock.lock();
-   		   return true;
-   	   }
-   	  //****END EDITED CODE****
-         return false; // this is left as an exercise
-      } // end method isGameOver
+
    	   /************************************* End Added Code *************************************/
+   	   
       // control thread's execution
       public void run()
       {
@@ -342,34 +328,6 @@ public class TicTacToeServer extends JFrame
                output.format( "Player O connected, please wait\n" );
                output.flush(); // flush output
             } // end else
-
-            /************************************* Added Code *************************************/
-            
-            
-            if (isGameOver() == true) {
-            	
-            	// Will display if O Winner
-            	if (whoIsWinner == 0) {
-            		output.format( "O is the Winner!\n" );
-                    output.flush(); // flush output
-                    gameLock.lock();
-            	}
-            	
-            	// Will display if X Winner
-            	if (whoIsWinner == 1) {
-            		output.format( "X is the Winner!\n" ); 
-                    output.flush(); // flush output
-                    gameLock.lock();
-            	}
-            	
-            	// Will display if No Winner
-            	if (whoIsWinner == 2) {
-            		output.format( "O is the Winner!\n" ); 
-                    output.flush(); // flush output
-                    gameLock.lock();
-            	}
-            }
-            /************************************* End Added Code *************************************/
             
             // while game not over
             while ( !isGameOver() ) 
@@ -395,15 +353,72 @@ public class TicTacToeServer extends JFrame
          } // end try
          finally
          {
-            try
-            {
-               connection.close(); // close connection to client
-            } // end try
-            catch ( IOException ioException ) 
-            {
-               ioException.printStackTrace();
-               System.exit( 1 );
-            } // end catch
+        	 if(matchWinner == true) { //If else determine if match has been won or is a draw
+	             currentPlayer = winningPlayer; // change player to winning player            
+	             gameLock.lock(); // lock game to signal other player to go
+	
+	             try 
+	             {
+	                otherPlayerTurn.signal(); // signal other player to continue
+	             } // end try
+	            
+	             finally
+	             {
+	                gameLock.unlock(); // unlock game after signaling
+	                players[currentPlayer].winMessage();
+	                
+	             } // end finally
+	             currentPlayer = ( currentPlayer + 1 ) % 2;
+	             gameLock.lock();
+	             try {
+	            	 otherPlayerTurn.signal();
+	             }
+	             finally{
+	            	 gameLock.unlock();
+	            	 players[currentPlayer].winMessage();
+	             }
+	             currentPlayer = winningPlayer;
+	             gameLock.lock();
+	             try {
+	            	 otherPlayerTurn.signal();
+	             }
+	             finally {
+	            	 gameLock.lock();
+	             }
+        	 }
+        	 else if(matchDraw == true) {
+        		 //lock currentPlayer's game
+        		 gameLock.lock();
+        		 try {
+        			 otherPlayerTurn.signal();
+        		 }
+        		 finally {
+        			 gameLock.unlock();
+        			 players[currentPlayer].drawMessage();
+        		 }
+        		 currentPlayer = (currentPlayer + 1) % 2;
+        		 gameLock.lock();
+        		 try {
+        			 otherPlayerTurn.signal();
+        		 }
+        			 finally {
+        				 gameLock.unlock();
+        				 players[currentPlayer].drawMessage();
+        			 }
+        		 }
+        	 else { //For temporary measures, connection.close() is set behind an else that may never be reached for now. Another one can be added later in the case a new game is being called
+                 try
+                 {
+                 	System.out.println("Connection closing"); //Connection is closing before we even changing anything, so this MUST be gated behind something else
+                 	//Otherwise we must make a new connection. Perhaps newgame calls a new version of the connection? Let's try commenting it out
+                    connection.close(); // close connection to client
+                 } // end try
+                 catch ( IOException ioException ) 
+                 {
+                    ioException.printStackTrace();
+                    System.exit( 1 );
+                 } // end catch
+        	 }
          } // end finally
       } // end method run
 
@@ -413,8 +428,8 @@ public class TicTacToeServer extends JFrame
          suspended = status; // set value of suspended
       } // end method setSuspended
    } // end class Player
-   /**************addded by SS for DKC 5/8. Edited by DKC 05/09***************************/
-   public void winSwitch(int location, int currMark) { //To be used in a for loop checking the winning condition
+   //addded by SS for DKC 5/8
+public void winSwitch(int location, int currMark) { //To be used in a for loop checking the winning condition
 	   switch(location) {
 		   case 0:
 		   {
@@ -726,8 +741,7 @@ public class TicTacToeServer extends JFrame
 			   break;
 		   }
 	   } //end of switch
-   } //end of winSwitch
-   /**********************************end of edited code***************************************/
+} //end of winSwitch
 } // end class TicTacToeServer
 
 /**************************************************************************
