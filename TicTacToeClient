@@ -25,6 +25,10 @@ import java.util.Formatter;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
+   /******************EDITED CODE:Moved button variables up into class variables to allow entire class access to them**********************/
+   JButton newButton;
+   JPanel buttonPanel;
+   /**********************************************************END OF EDITED CODE**********************************************************/
 
 public class TicTacToeClient extends JFrame implements Runnable 
 {
@@ -98,7 +102,7 @@ public class TicTacToeClient extends JFrame implements Runnable
       setVisible( true ); // show window
       
       /********Added by Omar*********/
-      JButton newButton = new JButton("New Game"); //Set up the New Game Button
+      newButton = new JButton("New Game"); //Set up the New Game Button
       newButton.addActionListener(new ActionListener() {
       	public void actionPerformed(ActionEvent arg0) {
       		
@@ -150,7 +154,7 @@ public class TicTacToeClient extends JFrame implements Runnable
           /////////////////////////////////////////////////////////////////////////////////////end of jesus code
       	}
       });
-      JPanel buttonPanel = new JPanel(); //Make a panel for extra Buttons
+      buttonPanel = new JPanel(); //Make a panel for extra Buttons
       
       buttonPanel.setSize(50, 100);   	//Set size of the panel
       getContentPane().add(buttonPanel, BorderLayout.WEST);	//Set position of panel
@@ -239,6 +243,14 @@ public class TicTacToeClient extends JFrame implements Runnable
          displayMessage( "Opponent moved. Your turn.\n" );
          myTurn = true; // now this client's turn
       } // end else if
+      /*****Edited Code:******/
+            else if (message.equals("Player " + X_MARK + " has won!") || message.equals("Player " + O_MARK+ " has won!")
+    		  || message.equals("Draw! Neither player wins!")) {
+    	  displayMessage(message + "\n");
+    	  displayMessage("Game is over. Start new game here."); //Attempt to reset board client side
+    	  buttonPanel.setVisible(true); //Allows button to be visible at the end of the game 
+      } //end else if
+      /*****Edited Code:******/
       else
          displayMessage( message + "\n" ); // display the message
    } // end method processMessage
