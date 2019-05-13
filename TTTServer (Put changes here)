@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.*;
-public class TicTacToeServerGit extends JFrame 
+public class TicTacToeServer extends JFrame 
 {
    private String[] board = new String[ 9 ]; // tic-tac-toe board
    private JTextArea outputArea; // for outputting moves
@@ -35,7 +35,7 @@ public class TicTacToeServerGit extends JFrame
    private int winningPlayer; //for part D, working out kinks
 
    // set up tic-tac-toe server and GUI that displays messages
-   public TicTacToeServerGit()
+   public TicTacToeServer()
    {
       super( "Tic-Tac-Toe Server" ); // set title of window
 
