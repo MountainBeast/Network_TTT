@@ -117,6 +117,37 @@ public class TicTacToeClient extends JFrame implements Runnable
       		boardPanel.revalidate();  
 			boardPanel.repaint();	  //repaints the board. In theory.*/
       		////////////////////////////////////End Added Code ////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////Jesus Code
+      JButton newButton2 = new JButton("Terminate"); //Set up the New Game Button
+      JPanel buttonPanel2 = new JPanel(); //Make a panel for extra Buttons
+      
+      buttonPanel2.setSize(50, 100);   	//Set size of the panel
+      add(buttonPanel2, BorderLayout.EAST);	//Set position of panel
+
+      buttonPanel2.add(newButton2);   //Add New Button to button panel
+      buttonPanel2.setVisible(true); //Set the Button Panel to be visible or not. Should be invisible by default.
+      
+      newButton2.addActionListener( 	//Actionevent to clear game board on New Button Click
+    		  
+    		  new ActionListener()
+    		  {
+    			
+    			  
+    		      public void actionPerformed(ActionEvent e)
+    		     {
+    		    	  
+    		    	  int dialogButton = 0;
+					  int dialogResult = JOptionPane.showConfirmDialog (null, "You have quit the game!","Warning",dialogButton);
+    		    	  if(dialogResult == JOptionPane.YES_OPTION){
+    		    		System.exit( 0 );
+    		    	  }
+    		    	  
+    		       boardPanel.revalidate();  
+    			   boardPanel.repaint();	  //repaints the board. In theory.
+    		     }   //end actionPerformed function
+    		   } //end ActionListener function
+    		 ); //End actionlistener event
+          /////////////////////////////////////////////////////////////////////////////////////end of jesus code
       	}
       });
       JPanel buttonPanel = new JPanel(); //Make a panel for extra Buttons
