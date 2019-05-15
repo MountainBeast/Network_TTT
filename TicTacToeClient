@@ -105,15 +105,22 @@ public class TicTacToeClient extends JFrame implements Runnable
       newButton = new JButton("New Game"); //Set up the New Game Button
       newButton.addActionListener(new ActionListener() {
       	public void actionPerformed(ActionEvent arg0) {
-      		
+      JButton newButton2 = new JButton("Terminate"); //Set up the New Game Button
+      JPanel buttonPanel = new JPanel(); //Make a panel for extra Buttons
+      
+      buttonPanel.setSize(50, 100);   	//Set size of the panel
+      add(buttonPanel, BorderLayout.EAST);	//Set position of panel
+
+      buttonPanel.add(newButton2);   //Add New Button to button panel
+      buttonPanel.setVisible(true); //Set the Button Panel to be visible or not. Should be invisible by default.		
       		////////////////////////////////////Added Code Joe ////////////////////////////////////
       		selection = JOptionPane.showConfirmDialog(null,
       		"Would you like to play another game?");
       		isYes = (selection == JOptionPane.YES_OPTION);
       		if (isYes = true) {      			
       			clearBoard();
-      			boardPanel.revalidate();  
-    			boardPanel.repaint();
+      			//boardPanel.revalidate();  
+    			//boardPanel.repaint();
     			displayMessage( "A new game has been started\n" );
       		}
       		
@@ -122,14 +129,7 @@ public class TicTacToeClient extends JFrame implements Runnable
 			boardPanel.repaint();	  //repaints the board. In theory.*/
       		////////////////////////////////////End Added Code ////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////Jesus Code
-      JButton newButton2 = new JButton("Terminate"); //Set up the New Game Button
-      JPanel buttonPanel2 = new JPanel(); //Make a panel for extra Buttons
       
-      buttonPanel2.setSize(50, 100);   	//Set size of the panel
-      add(buttonPanel2, BorderLayout.EAST);	//Set position of panel
-
-      buttonPanel2.add(newButton2);   //Add New Button to button panel
-      buttonPanel2.setVisible(true); //Set the Button Panel to be visible or not. Should be invisible by default.
       
       newButton2.addActionListener( 	//Actionevent to clear game board on New Button Click
     		  
@@ -146,8 +146,8 @@ public class TicTacToeClient extends JFrame implements Runnable
     		    		System.exit( 0 );
     		    	  }
     		    	  
-    		       boardPanel.revalidate();  
-    			   boardPanel.repaint();	  //repaints the board. In theory.
+    		       boardPanel.revalidate();//  
+    			   boardPanel.repaint();//	  //repaints the board. In theory.
     		     }   //end actionPerformed function
     		   } //end ActionListener function
     		 ); //End actionlistener event
