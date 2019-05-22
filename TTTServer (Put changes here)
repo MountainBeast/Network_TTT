@@ -33,7 +33,9 @@ public class TicTacToeServer extends JFrame
    private boolean matchWinner;
    private boolean matchDraw;
    private int winningPlayer; //for part D, working out kinks
-
+   private boolean XNewGame;
+   private boolean ONewGame;
+   
    // set up tic-tac-toe server and GUI that displays messages
    public TicTacToeServer()
    {
@@ -344,11 +346,22 @@ public class TicTacToeServer extends JFrame
                   output.format( "Valid move.\n" ); // notify client
                   output.flush(); // flush output
                } // end if
-               else // move was invalid
+               else if(matchWinner != true && matchDraw != true) // move was invalid
                {
                   output.format( "Invalid move, try again\n" );
                   output.flush(); // flush output
                } // end else
+	       else{
+	       try{
+	       gameLock.lock();
+	       output.format("Game is Over \n");
+	       output.flush();
+	       otherPlayerTurn.signal();
+	       }
+	       finally{
+	       gameLock.unlock();
+	       }
+	       }
             } // end while
          } // end try
          finally
