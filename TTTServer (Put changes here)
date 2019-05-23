@@ -337,6 +337,7 @@ public class TicTacToeServer extends JFrame
                int location = 0; // initialize move location
 
                if ( input.hasNext() )
+	       	if(!isGameOver()){
                   location = input.nextInt(); // get move location
 
                // check for valid move
@@ -351,16 +352,17 @@ public class TicTacToeServer extends JFrame
                   output.format( "Invalid move, try again\n" );
                   output.flush(); // flush output
                } // end else
+	       	} //end if
 	       else{
-	       try{
-	       gameLock.lock();
-	       output.format("Game is Over \n");
-	       output.flush();
-	       otherPlayerTurn.signal();
-	       }
-	       finally{
-	       gameLock.unlock();
-	       }
+		       try{
+		       gameLock.lock();
+		       output.format("Game is Over \n");
+		       output.flush();
+		       otherPlayerTurn.signal();
+		       }
+		       finally{
+		       gameLock.unlock();
+		       }
 	       }
             } // end while
          } // end try
