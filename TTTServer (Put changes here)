@@ -369,37 +369,9 @@ public class TicTacToeServer extends JFrame
          finally
          {
         	 if(matchWinner == true) { //If else determine if match has been won or is a draw
-	             currentPlayer = winningPlayer; // change player to winning player            
-	             gameLock.lock(); // lock game to signal other player to go
-	
-	             try 
-	             {
-	                otherPlayerTurn.signal(); // signal other player to continue
-	             } // end try
-	            
-	             finally
-	             {
-	                gameLock.unlock(); // unlock game after signaling
-	                players[currentPlayer].winMessage();
-	                
-	             } // end finally
-	             currentPlayer = ( currentPlayer + 1 ) % 2;
-	             gameLock.lock();
-	             try {
-	            	 otherPlayerTurn.signal();
-	             }
-	             finally{
-	            	 gameLock.unlock();
-	            	 players[currentPlayer].winMessage();
-	             }
-	             currentPlayer = winningPlayer;
-	             gameLock.lock();
-	             try {
-	            	 otherPlayerTurn.signal();
-	             }
-	             finally {
-	            	 gameLock.lock();
-	             }
+		 //Allows new game button to appear in both clients
+		 players[PLAYER_X].winMessage();
+		 players[PLAYER_O].winMessage();
         	 }
         	 else if(matchDraw == true) {
         		 //lock currentPlayer's game
@@ -434,14 +406,56 @@ public class TicTacToeServer extends JFrame
                     System.exit( 1 );
                  } // end catch
         	 }
+		 /*****newGameOrQuitLaunches regardless of win or loss****/
+		 newGameOrQuit(currentPlayer);
          } // end finally
       } // end method run
-
       // set whether or not thread is suspended
       public void setSuspended( boolean status )
       {
          suspended = status; // set value of suspended
       } // end method setSuspended
+      /***Added Code****DKC**05/22/19**/
+            public void newGameOrQuit(int player) { 
+      	   while(player != currentPlayer) {
+      	         gameLock.lock(); // lock game to wait for other player to go
+
+      	         try 
+      	         {
+      	            otherPlayerTurn.await(); // wait for player's turn, forces thread to release lock
+      	         } // end try
+      	         catch ( InterruptedException exception )
+      	         {
+      	            exception.printStackTrace();
+      	         } // end catch
+      	         finally
+      	         {
+      	            gameLock.unlock(); // unlock game after waiting
+      	         } // end finally
+      	   } //end while
+      	   //If player IS currentplayer, retrieve their input
+      	   gameLock.lock();
+      	   if(input.hasNext()) {
+      		   input.nextLine();
+      		   String message = input.nextLine();
+      		   if(message.equals("X has said yes")) {
+      			   System.out.println(message);
+      			   XNewGame = true;
+      		   }
+      		   else if(message.equals("O has said yes")) {
+      			   System.out.println(message);
+      			   ONewGame = true;
+      		   }
+      	   }
+   		 currentPlayer = (currentPlayer + 1) %2;
+   		 try {
+   			 otherPlayerTurn.signal();
+   		 }
+   		 finally {
+   			 gameLock.unlock();
+   		 }
+         }//end of newGameOrQuit
+	 /****End of Added Code******/
    } // end class Player
    //addded by SS for DKC 5/8
 public void winSwitch(int location, int currMark) { //To be used in a for loop checking the winning condition
