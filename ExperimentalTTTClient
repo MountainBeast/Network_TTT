@@ -21,6 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import java.util.Formatter;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
@@ -207,8 +208,19 @@ public class TicTacToeClient extends JFrame implements Runnable
          myTurn = true; // still this client's turn
       } // end else if
       else if ( message.equals( "Opponent moved" ) ) 
-      {
-         int location = input.nextInt(); // get move location
+      {  
+    	 //boolean to check
+    	 boolean isNum = false;
+    	 int location = 0; //default value, will always change upon check
+    	 while(!isNum) {
+    		 try {
+    			 location = input.nextInt(); // get move location
+    			 isNum = true;
+    		 }
+    		 catch(InputMismatchException e) {
+    			 isNum = false;
+    		 }
+    	 }
          input.nextLine(); // skip newline after int location
          int row = location / 3; // calculate row
          int column = location % 3; // calculate column
@@ -220,7 +232,9 @@ public class TicTacToeClient extends JFrame implements Runnable
       } // end else if
       else if (message.equals("Game is over")) {
     	  //End the player's turn, next input should be for restarting a new game
-    	  myTurn = true;
+    	  output.format("\n"); //send a newline char so that it skips, we'll see if this works
+    	  output.flush();
+    	  myTurn = false; //We'll see how this goes, might lock up o
       }
       else if ((message.equals("Player " + X_MARK + " has won!") || message.equals("Player " + O_MARK+ " has won!")
     		  || message.equals("Draw! Neither player wins!"))) {
