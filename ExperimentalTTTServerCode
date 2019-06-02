@@ -91,7 +91,6 @@ public class TicTacToeServer extends JFrame
             System.exit( 1 );
          } // end catch
       } // end for
-
       gameLock.lock(); // lock game to signal player X's thread
 
       try
@@ -103,6 +102,7 @@ public class TicTacToeServer extends JFrame
       {
          gameLock.unlock(); // unlock game after signalling player X
       } // end finally
+      //Added, testing something
    } // end method execute
    
    // display message in outputArea
@@ -208,6 +208,13 @@ public class TicTacToeServer extends JFrame
 		   }
 		   if(matchWinner == true) {
 			   winningPlayer = PLAYER_O;
+			   gameLock.lock(); //acquire lock
+			   try {
+				   otherPlayerTurn.signalAll();
+			   }
+			   finally {
+				   gameLock.unlock();
+			   }
 			   return true;
 		   }
 	   }//
@@ -235,6 +242,7 @@ public class TicTacToeServer extends JFrame
       private int playerNumber; // tracks which player this is
       private String mark; // mark for this player
       private boolean suspended = true; // whether thread is suspended
+      private boolean newGame = false; //reset with every new game
 
       // set up Player thread
       public Player( Socket socket, int number )
@@ -271,11 +279,12 @@ public class TicTacToeServer extends JFrame
     	  output.format("Draw! Neither player wins!" + "\n");
     	  output.flush();
       }
+      public boolean getNewGame() {
+    	  return newGame;
+      }
       // control thread's execution
       public void run()
       {
-    	 XNewGame = false;
-    	 ONewGame = false; 
          // send client its mark (X or O), process messages from client
          try 
          {
@@ -349,35 +358,34 @@ public class TicTacToeServer extends JFrame
 	               } // end inner else
                } //end outer if
                else {
-            	   gameLock.lock(); //give lock to current plyaer
-            	   //Trying something, may break game
+            	   gameLock.lock();
             	   output.format("Game is over" + "\n");
             	   output.flush();
-            	   gameLock.unlock(); //trying to eat turn
+            	   gameLock.unlock();
             	   //currentPlayer = (currentPlayer + 1) % 2;
                } //end outer else
             } // end while
          } // end try
          finally
          {
+        	newGame = false; //reset newGame
         	gameLock.lock();
         	//gameLock currently is unlocked/unowned. Give lock back to Player X
         	System.out.println("Winning Player is: " + MARKS[winningPlayer]);
         	System.out.println("Current Player: " + MARKS[playerNumber]);
         	System.out.println(MARKS[playerNumber] + " wants a new game!");
         	winMessage();
+        	gameLock.unlock(); //release lock to hand to other Player?
+        	//Maybe put a gameLock here
         	//Reset new game variables here
-        	while(!input.nextLine().equals("Yes")) {
-        		System.out.println("Game is over"); //for testing purposes.
+        	//Trying something
+        	if(input.hasNext()) {
+	        	while(!input.nextLine().equals("Yes")) {
+	        		System.out.println("Extra Input"); //for testing purposes.
+	        	}
         	}
         	System.out.println("Game has exited while loop");
-        	if(playerNumber == PLAYER_X) {
-        		XNewGame = true;
-        	}
-        	else {
-        		ONewGame = true;
-        	}
-        	gameLock.unlock();
+        	newGame = true; //just a blanket shading for now
         	/*//resets board on server side. Forcing the synchronization is a different story
 	        	}*/
         	//resets board serverside. The runGame execute will launch for the player's choice of who they want (Part D) X always goes first
@@ -396,17 +404,29 @@ public class TicTacToeServer extends JFrame
         	}
          } // end finally
          //Reset game variables and call runnable here
-         if(XNewGame == true && ONewGame == true) { //it's sort of working here. we will puzzle it out later
-            	matchWinner = false;
-            	matchDraw = false;
-            	currentPlayer = (currentPlayer + 1) % 2; //resets player turn to X to start always.
-            	for(int i = 0; i < board.length; i++) {
-            		board[i] = "";
-            	}
-            	for(int i = 0; i < players.length; i++) {
-            		runGame.execute(players[i]);
-            	}
-            }
+         if(players[playerNumber].getNewGame() == true) { //it's sort of working here. we will puzzle it out later
+        	if(players[(playerNumber + 1) % 2].getNewGame() == true) {
+	           	matchWinner = false;
+	           	matchDraw = false;
+	           	newGame = false;
+	           	gameLock.lock();
+	           	if(winningPlayer == PLAYER_X) { //because the game starts off on X's client
+		           	suspended = true; //needed so that the other player has to wait and hand off lock to the other waiting thread
+	           	}
+	           	else if (winningPlayer == PLAYER_O) {
+	           		players[PLAYER_O].setSuspended(true);
+	           	}
+	           	for(int j = 0; j < board.length; j++) {
+	           		board[j] = "";
+	           	}
+	           	currentPlayer = (currentPlayer + 1) % 2;
+	           	for(int i = 0; i < players.length; i++) {
+	           		displayMessage("\n");
+		           	runGame.execute(players[i]);
+	           	}
+           		gameLock.unlock();
+           }
+        }
       } // end method run
 
       // set whether or not thread is suspended
