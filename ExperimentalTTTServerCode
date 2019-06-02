@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
 import java.util.Formatter;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -273,6 +274,8 @@ public class TicTacToeServer extends JFrame
       // control thread's execution
       public void run()
       {
+    	 XNewGame = false;
+    	 ONewGame = false; 
          // send client its mark (X or O), process messages from client
          try 
          {
@@ -319,9 +322,17 @@ public class TicTacToeServer extends JFrame
             while ( !isGameOver() ) 
             {
                int location = 0; // initialize move location
-
-               if ( input.hasNext() )
-                  location = input.nextInt(); // get move location
+               boolean isNum = false;
+               while(!isNum) {
+               if ( input.hasNext() ) //create a check to obtain numbers only
+            	  try {
+	                  location = input.nextInt(); // get move location. This DOES NOT consume a newline
+	                  isNum = true; //break the while loop
+            	  }
+               	  catch(InputMismatchException e){
+               		  isNum = false;
+               	  }
+               }
 
                // check for valid move
                if(matchWinner == false && matchDraw == false) {
@@ -339,6 +350,7 @@ public class TicTacToeServer extends JFrame
                } //end outer if
                else {
             	   gameLock.lock(); //give lock to current plyaer
+            	   //Trying something, may break game
             	   output.format("Game is over" + "\n");
             	   output.flush();
             	   gameLock.unlock(); //trying to eat turn
@@ -387,14 +399,13 @@ public class TicTacToeServer extends JFrame
          if(XNewGame == true && ONewGame == true) { //it's sort of working here. we will puzzle it out later
             	matchWinner = false;
             	matchDraw = false;
+            	currentPlayer = (currentPlayer + 1) % 2; //resets player turn to X to start always.
             	for(int i = 0; i < board.length; i++) {
             		board[i] = "";
             	}
-            	gameLock.lock();
             	for(int i = 0; i < players.length; i++) {
             		runGame.execute(players[i]);
             	}
-            	gameLock.unlock();
             }
       } // end method run
 
