@@ -94,14 +94,15 @@ public class TicTacToeClient extends JFrame implements Runnable
        //Set up the New Game Button
       
       		////////////////////////////////////Added Code Joe ////////////////////////////////////
-      		selection = JOptionPane.showConfirmDialog(null,
-      		"Would you like to play another game?");
-      		isYes = (selection == JOptionPane.YES_OPTION);
-      		if (isYes == true) {
-      			output.format("Yes" + "\n");
-      			output.flush();
-      			clearBoard();
-    			displayMessage( "A new game has been started\n" );
+	      		selection = JOptionPane.showConfirmDialog(null,
+	      		"Would you like to play another game?");
+	      		isYes = (selection == JOptionPane.YES_OPTION);
+	      		if (isYes == true) {
+	      			output.format("Yes" + "\n");
+	      			output.flush();
+	      			clearBoard();
+	    			displayMessage( "A new game has been started\n" );
+	    			buttonPanel.setVisible(false);
       		}
       		
       		
@@ -231,10 +232,7 @@ public class TicTacToeClient extends JFrame implements Runnable
          myTurn = true; // now this client's turn
       } // end else if
       else if (message.equals("Game is over")) {
-    	  //End the player's turn, next input should be for restarting a new game
-    	  output.format("\n"); //send a newline char so that it skips, we'll see if this works
-    	  output.flush();
-    	  myTurn = false; //We'll see how this goes, might lock up o
+    	  //myTurn = false;
       }
       else if ((message.equals("Player " + X_MARK + " has won!") || message.equals("Player " + O_MARK+ " has won!")
     		  || message.equals("Draw! Neither player wins!"))) {
@@ -268,7 +266,7 @@ public class TicTacToeClient extends JFrame implements Runnable
      	setMark( board[i][j], ""); //visually resets the board
      }
 	  boardPanel.repaint();
-	  myTurn = true;
+	  myTurn = true; //let's see what happens when this is greyed out
 	  }
    }
    private void setMark( final Square squareToMark, final String mark )
