@@ -33,7 +33,7 @@ public class TicTacToeServer extends JFrame
    //***Edited: Added booleans/attributes below*** - DKC
    private boolean matchWinner;
    private boolean matchDraw;
-   private int winningPlayer; //for part D, working out kinks
+   private int winningPlayer = PLAYER_X; //initialized to player X for initialization purposes
    private boolean XNewGame;
    private boolean ONewGame;
    // set up tic-tac-toe server and GUI that displays messages
@@ -274,12 +274,12 @@ public class TicTacToeServer extends JFrame
          // send client its mark (X or O), process messages from client
          try 
          {
-            displayMessage( "Player " + mark + " connected\n" );
+            displayMessage( "Player X connected\n" );
             output.format( "%s\n", mark ); // send player's mark
             output.flush(); // flush output
 
             // if player X, wait for another player to arrive
-            if ( playerNumber == PLAYER_X ) 
+            if ( playerNumber == PLAYER_X ) //originally Player_X
             {
                output.format( "%s\n%s", "Player X connected",
                   "Waiting for another player\n" );
@@ -401,7 +401,9 @@ public class TicTacToeServer extends JFrame
 	           	for(int j = 0; j < board.length; j++) {
 	           		board[j] = "";
 	           	}
-	           	currentPlayer = (currentPlayer + 1) % 2;
+	           	if(currentPlayer != PLAYER_X) {
+	           		currentPlayer = (currentPlayer + 1) % 2;
+	           	}
 	           		displayMessage("\n");
 	           		for(int i = 0; i < players.length; i++) {
 	           			runGame.execute(players[i]);
