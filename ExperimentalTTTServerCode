@@ -190,13 +190,6 @@ public class TicTacToeServer extends JFrame
 	   if(matchWinner == true) {
 		   winningPlayer = PLAYER_X;
 		   //Announce results to players
-		   gameLock.lock(); //acquire lock
-		   try {
-			   otherPlayerTurn.signalAll();
-		   }
-		   finally {
-			   gameLock.unlock();
-		   }
 		   return true;
 	   }
 	   else {
@@ -208,13 +201,6 @@ public class TicTacToeServer extends JFrame
 		   }
 		   if(matchWinner == true) {
 			   winningPlayer = PLAYER_O;
-			   gameLock.lock(); //acquire lock
-			   try {
-				   otherPlayerTurn.signalAll();
-			   }
-			   finally {
-				   gameLock.unlock();
-			   }
 			   return true;
 		   }
 	   }//
@@ -332,15 +318,17 @@ public class TicTacToeServer extends JFrame
             {
                int location = 0; // initialize move location
                boolean isNum = false;
+               synchronized(this) {
                while(!isNum) {
-               if ( input.hasNext() ) //create a check to obtain numbers only
-            	  try {
-	                  location = input.nextInt(); // get move location. This DOES NOT consume a newline
-	                  isNum = true; //break the while loop
-            	  }
-               	  catch(InputMismatchException e){
-               		  isNum = false;
-               	  }
+	               if ( input.hasNext() ) //create a check to obtain numbers only
+	            	  try {
+		                  location = input.nextInt(); // get move location. This DOES NOT consume a newline
+		                  isNum = true; //break the while loop
+	            	  }
+	               	  catch(InputMismatchException e){
+	               		  isNum = false;
+	               	  }
+               		}
                }
 
                // check for valid move
@@ -368,24 +356,24 @@ public class TicTacToeServer extends JFrame
          } // end try
          finally
          {
-        	newGame = false; //reset newGame
         	gameLock.lock();
+        	newGame = false; //reset newGame
         	//gameLock currently is unlocked/unowned. Give lock back to Player X
         	System.out.println("Winning Player is: " + MARKS[winningPlayer]);
         	System.out.println("Current Player: " + MARKS[playerNumber]);
-        	System.out.println(MARKS[playerNumber] + " wants a new game!");
         	winMessage();
-        	gameLock.unlock(); //release lock to hand to other Player?
+        	gameLock.unlock();
         	//Maybe put a gameLock here
         	//Reset new game variables here
         	//Trying something
-        	if(input.hasNext()) {
-	        	while(!input.nextLine().equals("Yes")) {
-	        		System.out.println("Extra Input"); //for testing purposes.
-	        	}
-        	}
+	        	if(input.hasNext()) {
+		        	while(!input.nextLine().equals("Yes")) {
+		        		System.out.println("Extra Input"); //for testing purposes.
+		        	}
+        		}
         	System.out.println("Game has exited while loop");
         	newGame = true; //just a blanket shading for now
+        	System.out.println(MARKS[playerNumber] + " wants a new game!");
         	/*//resets board on server side. Forcing the synchronization is a different story
 	        	}*/
         	//resets board serverside. The runGame execute will launch for the player's choice of who they want (Part D) X always goes first
@@ -409,22 +397,15 @@ public class TicTacToeServer extends JFrame
 	           	matchWinner = false;
 	           	matchDraw = false;
 	           	newGame = false;
-	           	gameLock.lock();
-	           	if(winningPlayer == PLAYER_X) { //because the game starts off on X's client
-		           	suspended = true; //needed so that the other player has to wait and hand off lock to the other waiting thread
-	           	}
-	           	else if (winningPlayer == PLAYER_O) {
-	           		players[PLAYER_O].setSuspended(true);
-	           	}
+	           	players[winningPlayer].setSuspended(false); //trying something
 	           	for(int j = 0; j < board.length; j++) {
 	           		board[j] = "";
 	           	}
 	           	currentPlayer = (currentPlayer + 1) % 2;
-	           	for(int i = 0; i < players.length; i++) {
 	           		displayMessage("\n");
-		           	runGame.execute(players[i]);
+	           		for(int i = 0; i < players.length; i++) {
+	           			runGame.execute(players[i]);
 	           	}
-           		gameLock.unlock();
            }
         }
       } // end method run
