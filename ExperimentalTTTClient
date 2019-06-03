@@ -102,6 +102,12 @@ public class TicTacToeClient extends JFrame implements Runnable
 	      			output.flush();
 	      			clearBoard();
 	    			displayMessage( "A new game has been started\n" );
+	    			if(myMark.equals(X_MARK)) {
+	    				myTurn = true;
+	    			}
+	    			else if (myMark.equals(O_MARK)) {
+	    				myTurn = false;
+	    			}
 	    			buttonPanel.setVisible(false);
       		}
       		
