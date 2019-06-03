@@ -1,6 +1,5 @@
 // Fig. 27.15: TicTacToeClient.java
 // Client side of client/server Tic-Tac-Toe program.
-//added necessary imports (Scott, 5/8)
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -22,12 +21,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import java.util.Formatter;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
-   /******************EDITED CODE:Moved button variables up into class variables to allow entire class access to them**********************/
-   
-   /**********************************************************END OF EDITED CODE**********************************************************/
 
 public class TicTacToeClient extends JFrame implements Runnable 
 {
@@ -45,33 +42,19 @@ public class TicTacToeClient extends JFrame implements Runnable
    private boolean myTurn; // determines which client's turn it is
    private final String X_MARK = "X"; // mark for first client
    private final String O_MARK = "O"; // mark for second client
-   private final String ClearMark = "";
+   //Added in from github code
    JButton newButton;
    JPanel buttonPanel;
-   //////////////////////////////////// Added Code ////////////////////////////////////
    private boolean gameOver;
    private boolean isYes;
    private int selection;
-   
-   public void clearBoard()
-   {      
-	   //boardPanel.removeAll();
-	   boardPanel = new JPanel(); // set up panel for squares in board
-	   boardPanel.setLayout( new GridLayout( 3, 3, 0, 0 ) );
-	   
-	   //board = new Square[ 3 ][ 3 ];
-	   boardPanel.repaint();
-	   revalidate();
-   }
-   //////////////////////////////////// End Added Code ////////////////////////////////////
-
    // set up user-interface and board
    public TicTacToeClient( String host )
    { 
       ticTacToeHost = host; // set name of server
       displayArea = new JTextArea( 4, 30 ); // set up JTextArea
       displayArea.setEditable( false );
-      getContentPane().add( new JScrollPane( displayArea ), BorderLayout.SOUTH );
+      add( new JScrollPane( displayArea ), BorderLayout.SOUTH );
 
       boardPanel = new JPanel(); // set up panel for squares in board
       boardPanel.setLayout( new GridLayout( 3, 3, 0, 0 ) );
@@ -92,41 +75,43 @@ public class TicTacToeClient extends JFrame implements Runnable
 
       idField = new JTextField(); // set up textfield
       idField.setEditable( false );
-      getContentPane().add( idField, BorderLayout.NORTH );
+      add( idField, BorderLayout.NORTH );
       
       panel2 = new JPanel(); // set up panel to contain boardPanel
       panel2.add( boardPanel, BorderLayout.CENTER ); // add board panel
-      getContentPane().add( panel2, BorderLayout.CENTER ); // add container panel
+      add( panel2, BorderLayout.CENTER ); // add container panel
+      
+      //Add New Game Button to panel2
 
-      setSize( 300, 300 ); // set size of window
+      setSize( 300, 225 ); // set size of window
       setVisible( true ); // show window
       
       /********Added by Omar*********/
       newButton = new JButton("New Game"); //Set up the New Game Button
+      JButton newButton2 = new JButton("Terminate");
       newButton.addActionListener(new ActionListener() {
       	public void actionPerformed(ActionEvent arg0) {
-      JButton newButton2 = new JButton("Terminate"); //Set up the New Game Button
-      JPanel buttonPanel = new JPanel(); //Make a panel for extra Buttons
+       //Set up the New Game Button
       
-      buttonPanel.setSize(50, 100);   	//Set size of the panel
-      add(buttonPanel, BorderLayout.EAST);	//Set position of panel
-
-      buttonPanel.add(newButton2);   //Add New Button to button panel
-      buttonPanel.setVisible(true); //Set the Button Panel to be visible or not. Should be invisible by default.		
       		////////////////////////////////////Added Code Joe ////////////////////////////////////
-      		selection = JOptionPane.showConfirmDialog(null,
-      		"Would you like to play another game?");
-      		isYes = (selection == JOptionPane.YES_OPTION);
-      		if (isYes = true) {      			
-      			clearBoard();
-      			//boardPanel.revalidate();  
-    			//boardPanel.repaint();
-    			displayMessage( "A new game has been started\n" );
+	      		selection = JOptionPane.showConfirmDialog(null,
+	      		"Would you like to play another game?");
+	      		isYes = (selection == JOptionPane.YES_OPTION);
+	      		if (isYes == true) {
+	      			output.format("Yes" + "\n");
+	      			output.flush();
+	      			clearBoard();
+	    			displayMessage( "A new game has been started\n" );
+	    			if(myMark.equals(X_MARK)) {
+	    				myTurn = true;
+	    			}
+	    			else if (myMark.equals(O_MARK)) {
+	    				myTurn = false;
+	    			}
+	    			buttonPanel.setVisible(false);
       		}
       		
-      		/*clearBoard();
-      		boardPanel.revalidate();  
-			boardPanel.repaint();	  //repaints the board. In theory.*/
+      		
       		////////////////////////////////////End Added Code ////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////Jesus Code
       
@@ -146,8 +131,7 @@ public class TicTacToeClient extends JFrame implements Runnable
     		    		System.exit( 0 );
     		    	  }
     		    	  
-    		       boardPanel.revalidate();//  
-    			   boardPanel.repaint();//	  //repaints the board. In theory.
+    		     //	  //repaints the board. In theory.
     		     }   //end actionPerformed function
     		   } //end ActionListener function
     		 ); //End actionlistener event
@@ -158,12 +142,12 @@ public class TicTacToeClient extends JFrame implements Runnable
       
       buttonPanel.setSize(50, 100);   	//Set size of the panel
       getContentPane().add(buttonPanel, BorderLayout.WEST);	//Set position of panel
-
+      
+      buttonPanel.add(newButton2);
       buttonPanel.add(newButton);   //Add New Button to button panel
-      buttonPanel.setVisible(true); //Set the Button Panel to be visible or not. Should be invisible by default.
+      buttonPanel.setVisible(false); //Set the Button Panel to be visible or not. Should be invisible by default.
       
       /*****************************/
-      
       startClient();
    } // end TicTacToeClient constructor
 
@@ -224,7 +208,6 @@ public class TicTacToeClient extends JFrame implements Runnable
       {
          displayMessage( "Valid move, please wait.\n" );
          setMark( currentSquare, myMark ); // set mark in square
-         gameOver = true;
       } // end if
       else if ( message.equals( "Invalid move, try again" ) ) 
       {
@@ -232,8 +215,19 @@ public class TicTacToeClient extends JFrame implements Runnable
          myTurn = true; // still this client's turn
       } // end else if
       else if ( message.equals( "Opponent moved" ) ) 
-      {
-         int location = input.nextInt(); // get move location
+      {  
+    	 //boolean to check
+    	 boolean isNum = false;
+    	 int location = 0; //default value, will always change upon check
+    	 while(!isNum) {
+    		 try {
+    			 location = input.nextInt(); // get move location
+    			 isNum = true;
+    		 }
+    		 catch(InputMismatchException e) {
+    			 isNum = false;
+    		 }
+    	 }
          input.nextLine(); // skip newline after int location
          int row = location / 3; // calculate row
          int column = location % 3; // calculate column
@@ -243,14 +237,14 @@ public class TicTacToeClient extends JFrame implements Runnable
          displayMessage( "Opponent moved. Your turn.\n" );
          myTurn = true; // now this client's turn
       } // end else if
-      /*****Edited Code:******/
-            else if (message.equals("Player " + X_MARK + " has won!") || message.equals("Player " + O_MARK+ " has won!")
-    		  || message.equals("Draw! Neither player wins!")) {
+      else if (message.equals("Game is over")) {
+    	  //myTurn = false;
+      }
+      else if ((message.equals("Player " + X_MARK + " has won!") || message.equals("Player " + O_MARK+ " has won!")
+    		  || message.equals("Draw! Neither player wins!"))) {
     	  displayMessage(message + "\n");
-    	  displayMessage("Game is over. Start new game here."); //Attempt to reset board client side
-    	  buttonPanel.setVisible(true); //Allows button to be visible at the end of the game 
-      } //end else if
-      /*****Edited Code:******/
+    	  buttonPanel.setVisible(true);
+      }
       else
          displayMessage( message + "\n" ); // display the message
    } // end method processMessage
@@ -270,6 +264,17 @@ public class TicTacToeClient extends JFrame implements Runnable
    } // end method displayMessage
 
    // utility method to set mark on board in event-dispatch thread
+   public void clearBoard()
+   {      
+	for(int i=0; i< board.length; i++) {
+     for(int j=0; j<board[i].length; j++)
+     {
+     	setMark( board[i][j], ""); //visually resets the board
+     }
+	  boardPanel.repaint();
+	  myTurn = true; //let's see what happens when this is greyed out
+	  }
+   }
    private void setMark( final Square squareToMark, final String mark )
    {
       SwingUtilities.invokeLater(
