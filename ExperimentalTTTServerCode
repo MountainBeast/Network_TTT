@@ -274,7 +274,7 @@ public class TicTacToeServer extends JFrame
          // send client its mark (X or O), process messages from client
          try 
          {
-            displayMessage( "Player X connected\n" );
+            displayMessage( "Player " + mark + " connected\n" );
             output.format( "%s\n", mark ); // send player's mark
             output.flush(); // flush output
 
@@ -359,21 +359,20 @@ public class TicTacToeServer extends JFrame
         	gameLock.lock();
         	newGame = false; //reset newGame
         	//gameLock currently is unlocked/unowned. Give lock back to Player X
-        	System.out.println("Winning Player is: " + MARKS[winningPlayer]);
-        	System.out.println("Current Player: " + MARKS[playerNumber]);
-        	winMessage();
+        	if(matchWinner) {
+        		winMessage();
+        	}
+        	else if (matchDraw) {
+        		drawMessage();
+        	}
         	gameLock.unlock();
         	//Maybe put a gameLock here
         	//Reset new game variables here
         	//Trying something
-	        	if(input.hasNext()) {
-		        	while(!input.nextLine().equals("Yes")) {
-		        		System.out.println("Extra Input"); //for testing purposes.
-		        	}
-        		}
-        	System.out.println("Game has exited while loop");
+        	while(!input.nextLine().equals("Yes")) {
+        		newGame = false;
+        	}
         	newGame = true; //just a blanket shading for now
-        	System.out.println(MARKS[playerNumber] + " wants a new game!");
         	/*//resets board on server side. Forcing the synchronization is a different story
 	        	}*/
         	//resets board serverside. The runGame execute will launch for the player's choice of who they want (Part D) X always goes first
@@ -392,11 +391,12 @@ public class TicTacToeServer extends JFrame
         	}
          } // end finally
          //Reset game variables and call runnable here
-         if(players[playerNumber].getNewGame() == true) { //it's sort of working here. we will puzzle it out later
-        	if(players[(playerNumber + 1) % 2].getNewGame() == true) {
+         if(players[playerNumber].getNewGame() == true && players[(playerNumber + 1) % 2].getNewGame() == true) { //it's sort of working here. we will puzzle it out later
+        	    gameLock.lock();
 	           	matchWinner = false;
 	           	matchDraw = false;
 	           	newGame = false;
+	           	gameLock.unlock();
 	           	players[winningPlayer].setSuspended(false); //trying something
 	           	for(int j = 0; j < board.length; j++) {
 	           		board[j] = "";
@@ -407,7 +407,6 @@ public class TicTacToeServer extends JFrame
 	           		displayMessage("\n");
 	           		for(int i = 0; i < players.length; i++) {
 	           			runGame.execute(players[i]);
-	           	}
            }
         }
       } // end method run
